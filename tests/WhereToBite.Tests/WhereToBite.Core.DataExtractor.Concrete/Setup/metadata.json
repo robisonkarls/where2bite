@@ -1,0 +1,113 @@
+﻿{
+  "help": "https://ckan0.cf.opendata.inter.prod-toronto.ca/api/3/action/help_show?name=package_show",
+  "success": true,
+  "result": {
+    "license_title": "Open Government Licence – Toronto",
+    "owner_unit": null,
+    "relationships_as_object": [],
+    "topics": "Health,Public safety",
+    "owner_email": "opendata@toronto.ca",
+    "excerpt": "Snapshot of the information to the public concerning the Toronto Public Health Food Premises Inspection and Disclosure system. The data set is as current as the date of the extraction.",
+    "private": false,
+    "owner_division": "Toronto Public Health",
+    "num_tags": 7,
+    "id": "ea1d6e57-87af-4e23-b722-6c1f5aa18a8d",
+    "metadata_created": "2019-07-23T17:04:01.187902",
+    "refresh_rate": "Real-time",
+    "title": "Dinesafe",
+    "license_url": "https://open.toronto.ca/open-data-license/",
+    "state": "active",
+    "information_url": "http://www.toronto.ca/health/dinesafe/index.htm",
+    "license_id": "open-government-licence-toronto",
+    "type": "dataset",
+    "resources": [
+      {
+        "cache_last_updated": null,
+        "package_id": "ea1d6e57-87af-4e23-b722-6c1f5aa18a8d",
+        "datastore_active": false,
+        "id": "c3ebef25-177b-4adc-9c47-8763b04a52fb",
+        "size": null,
+        "format": "XML",
+        "state": "active",
+        "hash": "",
+        "description": "",
+        "is_preview": true,
+        "last_modified": null,
+        "url_type": null,
+        "mimetype": null,
+        "cache_url": null,
+        "extract_job": null,
+        "name": "Dinesafe XML feed",
+        "created": "2019-10-23T19:57:21.160794",
+        "url": "https://secure.toronto.ca/opendata/ds/od_xml.xml?v=2.0&format=file",
+        "mimetype_inner": null,
+        "position": 0,
+        "revision_id": "dfbfe17b-8a64-4572-b841-ce4ced4ee486",
+        "resource_type": null
+      }
+    ],
+    "limitations": null,
+    "num_resources": 1,
+    "collection_method": null,
+    "tags": [
+      {
+        "vocabulary_id": null,
+        "state": "active",
+        "display_name": "dinesafe",
+        "id": "b44a5787-f882-4604-a7fa-865b3567b4a8",
+        "name": "dinesafe"
+      },
+      {
+        "vocabulary_id": null,
+        "state": "active",
+        "display_name": "food",
+        "id": "b0a325c5-814f-4372-9913-b93da2d8130a",
+        "name": "food"
+      },
+      {
+        "vocabulary_id": null,
+        "state": "active",
+        "display_name": "health inspection",
+        "id": "666759ca-fe4a-4d5e-bf0f-4e5c3795e23a",
+        "name": "health inspection"
+      },
+      {
+        "vocabulary_id": null,
+        "state": "active",
+        "display_name": "restaurant",
+        "id": "d3bace11-10ec-4b18-9139-edaed0283f8a",
+        "name": "restaurant"
+      }
+    ],
+    "is_retired": false,
+    "groups": [],
+    "creator_user_id": "150d5301-86ec-44a3-a070-50f2cea839c9",
+    "dataset_category": "Document",
+    "relationships_as_subject": [],
+    "name": "dinesafe",
+    "metadata_modified": "2020-02-20T18:03:07.058426",
+    "isopen": false,
+    "url": null,
+    "notes": "  * **ROW_ID** \\- Represents the Row Number\r\n  * **ESTABLISHMENT_ID** - Unique identifier for an establishment\r\n  * **INSPECTION_ID** \\- Unique identifier for each Inspection\r\n  * **ESTABLISHMENT_NAME** - Business name of the establishment\r\n  * **ESTABLISHMENTTYPE** - Establishment type ie restaurant, mobile cart\r\n  * **ESTABLISHMENT_ADDRESS** - Municipal address of the establishment\r\n  * **LONG/LAT -** Longitude & Latitude coordinates of an establishment\r\n  * **ESTABLISHMENT_STATUS** - Pass, Conditional Pass, Closed\r\n  * **MINIMUMINSPECTIONSPERYEAR** - Every eating and drinking establishment in the City of Toronto receives a minimum of 1, 2, or 3 inspections each year depending on the specific type of establishment, the food preparation processes, volume and type of food served and other related criteria. Low risk premises that offer for sale only pre-packaged non-hazardous food shall be inspected once every two years. The inspection frequency for these low risk premises is shown as \"O\" (Other) on the report and in the data set\r\n  * **INFRACTION_DETAILS** - Description of the Infraction\r\n  * **INSPECTION_DATE** - Calendar date the inspection was conducted\r\n  * **SEVERITY** - Level of the infraction, i.e. S - Significant, M - Minor, C - Crucial\r\n  * **ACTION** - Enforcement activity based on the infractions noted during a food safety inspection\r\n  * **COURT_OUTCOME** - The registered court decision resulting from the issuance of a ticket or summons for outstanding infractions to the Health Protection and Promotion Act\r\n  * **AMOUNT_FINED** - Fine determined in a court outcome\r\n\r\n\r\n",
+    "owner_org": "95a064ae-77e8-4ef0-a4e3-4e2d43e1f066",
+    "last_refreshed": "2019-10-23T19:57:21.160794",
+    "image_url": null,
+    "formats": "XML",
+    "owner_section": null,
+    "organization": {
+      "description": "",
+      "created": "2019-07-23T15:51:35.236542",
+      "title": "City of Toronto",
+      "name": "city-of-toronto",
+      "is_organization": true,
+      "state": "active",
+      "image_url": "",
+      "revision_id": "62817a72-3dc5-450a-8cc4-fef2c51660da",
+      "type": "organization",
+      "id": "95a064ae-77e8-4ef0-a4e3-4e2d43e1f066",
+      "approval_status": "approved"
+    },
+    "revision_id": "b9bac9ab-91b5-4ee5-ad94-fbc95df93250",
+    "civic_issues": null
+  }
+}

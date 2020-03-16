@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DINESAFE_DATA>
+    <ESTABLISHMENT>
+        <ID>9008018</ID>
+        <NAME>&apos;K&apos; STORE</NAME>
+        <TYPE>Food Store (Convenience/Variety)</TYPE>
+        <ADDRESS>99 CARLTON ST</ADDRESS>
+        <LATITUDE>43.66205</LATITUDE>
+        <LONGITUDE>-79.37747</LONGITUDE>
+        <STATUS>Pass</STATUS>
+        <INSPECTION>
+            <STATUS>Pass</STATUS>
+            <DATE>2019-03-29</DATE>
+        </INSPECTION>
+    </ESTABLISHMENT>
+    <ESTABLISHMENT>
+        <ID>10510325</ID>
+        <NAME>0109 Dessert + Chocolate</NAME>
+        <TYPE>Restaurant</TYPE>
+        <ADDRESS>2190 MCNICOLL AVE, -109</ADDRESS>
+        <LATITUDE>43.81477</LATITUDE>
+        <LONGITUDE>-79.29491</LONGITUDE>
+        <STATUS>Pass</STATUS>
+        <INSPECTION>
+            <STATUS>Pass</STATUS>
+            <DATE>2019-10-25</DATE>
+        </INSPECTION>
+    </ESTABLISHMENT>
+    <ESTABLISHMENT>
+        <ID>10500438</ID>
+        <NAME>1 PLUS 1 PIZZA</NAME>
+        <TYPE>Food Take Out</TYPE>
+        <ADDRESS>361 OAKWOOD AVE</ADDRESS>
+        <LATITUDE>43.68725</LATITUDE>
+        <LONGITUDE>-79.43842</LONGITUDE>
+        <STATUS>Pass</STATUS>
+        <INSPECTION>
+            <STATUS>Conditional Pass</STATUS>
+            <DATE>2019-03-04</DATE>
+            <INFRACTION>
+                <SEVERITY>C - Crucial</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>S - Significant</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>S - Significant</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>S - Significant</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+        </INSPECTION>
+        <INSPECTION>
+            <STATUS>Pass</STATUS>
+            <DATE>2019-03-08</DATE>
+        </INSPECTION>
+        <INSPECTION>
+            <STATUS>Pass</STATUS>
+            <DATE>2019-10-24</DATE>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>NA - Not Applicable</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+        </INSPECTION>
+        <INSPECTION>
+            <STATUS>Pass</STATUS>
+            <DATE>2020-02-14</DATE>
+            <INFRACTION>
+                <SEVERITY>S - Significant</SEVERITY>
+                <ACTION>Corrected During Inspection</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>NA - Not Applicable</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+            <INFRACTION>
+                <SEVERITY>M - Minor</SEVERITY>
+                <ACTION>Notice to Comply</ACTION>
+                <CONVICTION_DATE></CONVICTION_DATE>
+                <COURT_OUTCOME></COURT_OUTCOME>
+                <AMOUNT_FINED></AMOUNT_FINED>
+            </INFRACTION>
+        </INSPECTION>
+    </ESTABLISHMENT>
+</DINESAFE_DATA>

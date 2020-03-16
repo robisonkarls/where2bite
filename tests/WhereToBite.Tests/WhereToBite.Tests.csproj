@@ -19,6 +19,7 @@
 
     <ItemGroup>
         <Content Include=".\WhereToBite.Core.DataExtractor.Concrete\Setup\metadata.json" Link=".\Setup\metadata.json" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include=".\WhereToBite.Core.DataExtractor.Concrete\Setup\establishments_data.xml" Link=".\Setup\establishments_data.xml" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>

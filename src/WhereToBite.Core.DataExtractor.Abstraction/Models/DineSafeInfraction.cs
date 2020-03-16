@@ -11,11 +11,26 @@ namespace WhereToBite.Core.DataExtractor.Abstraction.Models
         public string Severity { get; set; } = default!;
         [XmlElement(ElementName="ACTION")]
         public string Action { get; set; } = default!;
-        [XmlElement(ElementName="CONVICTION_DATE")]
-        public DateTime ConvictionDate { get; set; }
+        [XmlElement(ElementName = "CONVICTION_DATE")]
+        // ReSharper disable once InconsistentNaming
+        public string _ConvictionDate { get; set; }
         [XmlElement(ElementName="COURT_OUTCOME")]
         public string CourtOutcome { get; set; } = default!;
         [XmlElement(ElementName="AMOUNT_FINED")]
         public string AmountFined { get; set; } = default!;
+
+        [XmlIgnore]
+        private DateTime? ConvictionDate
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(_ConvictionDate))
+                {
+                    return DateTime.Parse(_ConvictionDate);
+                }
+
+                return null;
+            }
+        }
     }
 }

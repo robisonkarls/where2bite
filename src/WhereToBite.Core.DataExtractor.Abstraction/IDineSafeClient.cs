@@ -9,6 +9,6 @@ namespace WhereToBite.Core.DataExtractor.Abstraction
     {
         Task<DineSafeMetadata> GetMetadataAsync(CancellationToken cancellationToken);
 
-        Task<DineSafeEstablishment> GetEstablishmentsAsync(Uri resourceUri, CancellationToken cancellationToken);
+        Task<DineSafeData> GetEstablishmentsAsync(Uri resourceUri, CancellationToken cancellationToken);
     }
 }

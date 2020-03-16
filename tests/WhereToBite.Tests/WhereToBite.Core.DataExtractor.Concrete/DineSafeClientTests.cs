@@ -1,12 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Microsoft.Win32.SafeHandles;
 using WhereToBite.Core.DataExtractor.Abstraction;
 using WhereToBite.Core.DataExtractor.Concrete;
 using Xunit;
@@ -78,6 +78,33 @@ namespace WhereToBite.Tests.WhereToBite.Core.DataExtractor.Concrete
         {
             await Assert.ThrowsAnyAsync<ArgumentNullException>(() =>
                 _client.GetEstablishmentsAsync(null, CancellationToken.None));
+        }
+
+        [Fact]
+        public async Task ShouldGetEstablishments()
+        {
+            var payloadFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "Setup", "establishments_data.xml");
+            var httpClient = new HttpClient(new DineMockHttpMessageHandler(HttpStatusCode.OK, payloadFileLocation));
+            
+            var client = CreateDineSafeClient("http://localhost", httpClient);
+
+            var actual = await client.GetEstablishmentsAsync(new Uri("http://localhost"), CancellationToken.None);
+            
+            Assert.NotNull(actual);
+            Assert.Equal(3, actual.Establishments.ToArray().Length);
+        }
+
+        [Fact]
+        public async Task ShouldReturnNullInCaseServerError()
+        {
+            var payloadFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "Setup", "establishments_data.xml");
+            var httpClient = new HttpClient(new DineMockHttpMessageHandler(HttpStatusCode.InternalServerError, payloadFileLocation));
+            
+            var client = CreateDineSafeClient("http://localhost", httpClient);
+
+            var actual = await client.GetEstablishmentsAsync(new Uri("http://localhost"), CancellationToken.None);
+            
+            Assert.Null(actual);
         }
 
         public void Dispose()

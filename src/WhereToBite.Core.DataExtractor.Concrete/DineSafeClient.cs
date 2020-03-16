@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WhereToBite.Core.DataExtractor.Abstraction;
@@ -33,18 +34,49 @@ namespace WhereToBite.Core.DataExtractor.Concrete
             using (_logger.BeginScope("Started Metadata Request"))
             {
                 _logger.LogInformation($"URL: {_metadataUri.Host} ");
-                return await GetAsync<DineSafeMetadata>(_metadataUri, cancellationToken);
+
+                var metadataStream = await GetAsync(_metadataUri, cancellationToken);
+
+                if (metadataStream == null)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    return await 
+                        JsonSerializer.DeserializeAsync<DineSafeMetadata>(metadataStream, null, cancellationToken);
+                }
+                catch (JsonException exception)
+                {
+                    _logger.LogError($"Error: {exception}");
+                    throw;
+                }
             }
         }
 
-        public Task<DineSafeEstablishment> GetEstablishmentsAsync([NotNull] Uri resourceUri, CancellationToken cancellationToken)
+        public async Task<DineSafeData> GetEstablishmentsAsync([NotNull] Uri resourceUri, CancellationToken cancellationToken)
         {
             if (resourceUri == null)
             {
                 throw new ArgumentNullException(nameof(resourceUri));
             }
-            
-            throw new NotImplementedException();
+
+            using (_logger.BeginScope("Started Establishments Request"))
+            {
+                _logger.LogInformation($"URL: {resourceUri.Host}");
+
+                var establishmentsStream = await GetAsync(resourceUri, cancellationToken);
+
+                if (establishmentsStream == null)
+                {
+                    return null;
+                }
+                
+                var serializer = new XmlSerializer(typeof(DineSafeData));
+
+                return (DineSafeData) serializer.Deserialize(establishmentsStream);
+            }
         }
 
         public void Dispose()
@@ -52,40 +84,28 @@ namespace WhereToBite.Core.DataExtractor.Concrete
             _httpClient.Dispose();
         }
 
-        private async Task<T> GetAsync<T>(Uri uri, CancellationToken cancellationToken)
+        private async Task<Stream> GetAsync([NotNull] Uri uri, CancellationToken cancellationToken)
         {
-            using var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             _logger.LogInformation("Started Request");
 
-            Stream responseStream;
-            
             try
             {
-                var responseMessage = await _httpClient.GetAsync(uri, tokenSource.Token);
-                
-                if (!responseMessage.IsSuccessStatusCode)
+                var responseMessage = await _httpClient.GetAsync(uri, cancellationToken);
+
+                if (responseMessage.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"Error requesting for {uri.Host}");
-                    _logger.LogError($"Request Failed: {responseMessage.ReasonPhrase}");
-                    return default;
+                    _logger.LogInformation($"Request completed");
+                    return await responseMessage.Content.ReadAsStreamAsync();
                 }
                 
-                responseStream = await responseMessage.Content.ReadAsStreamAsync();
+                _logger.LogError($"Error requesting for {uri.Host}");
+                _logger.LogError($"Failed: {responseMessage.ReasonPhrase}");
+                
+                return default;
             }
-            catch (Exception e)
+            catch (HttpRequestException exception)
             {
-                _logger.LogError($"Error: {e.Message}");
-                throw;
-            }
-
-            try
-            {
-                _logger.LogInformation("Request completed");
-                return await JsonSerializer.DeserializeAsync<T>(responseStream, null, tokenSource.Token);
-            }
-            catch (JsonException e)
-            {
-                _logger.LogError($"Error: {e.Message}");
+                _logger.LogError($"Failed: {exception.Message}");
                 throw;
             }
         }

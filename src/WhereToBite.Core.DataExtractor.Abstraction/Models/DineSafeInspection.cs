@@ -13,6 +13,6 @@ namespace WhereToBite.Core.DataExtractor.Abstraction.Models
         [XmlElement(ElementName="DATE")]
         public DateTime Date { get; set; } = default!;
         [XmlElement(ElementName="INFRACTION")]
-        public IReadOnlyList<DineSafeInfraction>? Infractions { get; set; }
+        public DineSafeInfraction[]? Infractions { get; set; }
     }
 }

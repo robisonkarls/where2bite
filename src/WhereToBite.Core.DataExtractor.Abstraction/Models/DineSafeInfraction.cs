@@ -13,7 +13,8 @@ namespace WhereToBite.Core.DataExtractor.Abstraction.Models
         public string Action { get; set; } = default!;
         [XmlElement(ElementName = "CONVICTION_DATE")]
         // ReSharper disable once InconsistentNaming
-        public string _ConvictionDate { get; set; }
+        public string _ConvictionDate { get; set; } = default!;
+
         [XmlElement(ElementName="COURT_OUTCOME")]
         public string CourtOutcome { get; set; } = default!;
         [XmlElement(ElementName="AMOUNT_FINED")]

@@ -20,15 +20,15 @@ namespace WhereToBite.Core.DataExtractor.Concrete
         private readonly ILogger<DineSafeClient> _logger;
 
         public DineSafeClient(
-            [NotNull]IOptions<DineSafeSettings> dineSafeSettings, 
-            [NotNull]HttpClient httpClient, 
-            [NotNull]ILogger<DineSafeClient> logger)
+            [NotNull] IOptions<DineSafeSettings> dineSafeSettings,
+            [NotNull] HttpClient httpClient,
+            [NotNull] ILogger<DineSafeClient> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
             _metadataUri = new Uri(dineSafeSettings.Value.MetadataUrl);
         }
-        
+
         public async Task<DineSafeMetadata> GetMetadataAsync(CancellationToken cancellationToken)
         {
             using (_logger.BeginScope("Started Metadata Request"))
@@ -44,7 +44,7 @@ namespace WhereToBite.Core.DataExtractor.Concrete
 
                 try
                 {
-                    return await 
+                    return await
                         JsonSerializer.DeserializeAsync<DineSafeMetadata>(metadataStream, null, cancellationToken);
                 }
                 catch (JsonException exception)
@@ -55,7 +55,8 @@ namespace WhereToBite.Core.DataExtractor.Concrete
             }
         }
 
-        public async Task<DineSafeData> GetEstablishmentsAsync([NotNull] Uri resourceUri, CancellationToken cancellationToken)
+        public async Task<DineSafeData> GetEstablishmentsAsync([NotNull] Uri resourceUri,
+            CancellationToken cancellationToken)
         {
             if (resourceUri == null)
             {
@@ -72,7 +73,7 @@ namespace WhereToBite.Core.DataExtractor.Concrete
                 {
                     return null;
                 }
-                
+
                 var serializer = new XmlSerializer(typeof(DineSafeData));
 
                 return (DineSafeData) serializer.Deserialize(establishmentsStream);
@@ -86,7 +87,7 @@ namespace WhereToBite.Core.DataExtractor.Concrete
 
         private async Task<Stream> GetAsync([NotNull] Uri uri, CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Started Request");
+            _logger.LogInformation($"Started Request for: {uri.Host}");
 
             try
             {
@@ -97,10 +98,9 @@ namespace WhereToBite.Core.DataExtractor.Concrete
                     _logger.LogInformation($"Request completed");
                     return await responseMessage.Content.ReadAsStreamAsync();
                 }
-                
-                _logger.LogError($"Error requesting for {uri.Host}");
+
                 _logger.LogError($"Failed: {responseMessage.ReasonPhrase}");
-                
+
                 return default;
             }
             catch (HttpRequestException exception)

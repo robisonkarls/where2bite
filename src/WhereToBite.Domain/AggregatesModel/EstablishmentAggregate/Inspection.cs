@@ -10,7 +10,6 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public IReadOnlyCollection<Infraction> Infractions => _infractions;
         private readonly List<Infraction> _infractions;
         
-        private int? _establishmentId;
         public InspectionStatus Status { get; }
         public DateTime Date { get; }
 

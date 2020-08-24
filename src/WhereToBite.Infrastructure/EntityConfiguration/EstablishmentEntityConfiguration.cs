@@ -9,6 +9,13 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
         public void Configure(EntityTypeBuilder<Establishment> establishmentConfiguration)
         {
             establishmentConfiguration.HasKey(e => e.Id);
+            establishmentConfiguration.Property(e => e.Latitude).IsRequired();
+            establishmentConfiguration.Property(e => e.Longitude).IsRequired();
+            establishmentConfiguration.Property(e => e.Address).IsRequired();
+            establishmentConfiguration.Property(e => e.Name).IsRequired();
+            establishmentConfiguration.Property(e => e.Status).IsRequired();
+            establishmentConfiguration.Property(e => e.Type).IsRequired();
+            establishmentConfiguration.Property(e => e.DineSafeId).IsRequired();
             
             var navigation = establishmentConfiguration.Metadata.FindNavigation(nameof(Establishment.Inspections));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

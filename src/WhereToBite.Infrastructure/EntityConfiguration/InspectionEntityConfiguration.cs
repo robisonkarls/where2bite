@@ -9,7 +9,12 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
         public void Configure(EntityTypeBuilder<Inspection> inspectionConfiguration)
         {
             inspectionConfiguration.HasKey(i => i.Id);
+            inspectionConfiguration.Property(i => i.Status).IsRequired();
+            inspectionConfiguration.Property<int>("OrderId").IsRequired();
+
             
+            var navigation = inspectionConfiguration.Metadata.FindNavigation(nameof(Inspection.Infractions));
+            navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

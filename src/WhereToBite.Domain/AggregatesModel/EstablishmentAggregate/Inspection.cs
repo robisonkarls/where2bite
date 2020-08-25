@@ -38,8 +38,6 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
                 var filteredInspection = infractionsList.Where(i => i.Date > lastInfractionDate);
                 _infractions.AddRange(filteredInspection);
             }
-            
-            
         }
     }
 }

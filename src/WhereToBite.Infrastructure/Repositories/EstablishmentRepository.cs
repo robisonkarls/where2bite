@@ -24,9 +24,8 @@ namespace WhereToBite.Infrastructure.Repositories
 
         public async Task<Establishment> GetAsync(int establishmentId)
         {
-            var establishment = await _context.Establishments
+            return await _context.Establishments
                 .FirstOrDefaultAsync(e => e.Id == establishmentId);
-            return establishment;
         }
     }
 }

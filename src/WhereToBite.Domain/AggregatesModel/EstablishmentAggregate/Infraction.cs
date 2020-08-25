@@ -11,13 +11,18 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public string CourtOutcome { get; }
         public decimal AmountFined { get; }
 
-        public Infraction(SeverityTypes severity, ActionTypes action, DateTime date, string courtOutcome, decimal amountFined)
+        public Infraction(SeverityTypes severity, ActionTypes action, DateTime date, string courtOutcome, decimal amountFined) : this()
         {
             Severity = severity ?? throw new ArgumentNullException(nameof(severity));
             Action = action ?? throw new ArgumentNullException(nameof(action));
             Date = date;
             CourtOutcome = courtOutcome ?? throw new ArgumentNullException(nameof(courtOutcome));
             AmountFined = amountFined;
+        }
+
+        protected Infraction()
+        {
+            
         }
     }
 }

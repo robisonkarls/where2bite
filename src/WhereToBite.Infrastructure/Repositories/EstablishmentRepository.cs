@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
@@ -19,13 +20,13 @@ namespace WhereToBite.Infrastructure.Repositories
         
         public Establishment Add(Establishment establishment)
         {
-            return _context.Add(establishment).Entity;
+            return _context.Establishments.Add(establishment).Entity;
         }
 
-        public async Task<Establishment> GetAsync(int establishmentId)
+        public async Task<Establishment> GetAsync(int establishmentId, CancellationToken cancellationToken)
         {
             return await _context.Establishments
-                .FirstOrDefaultAsync(e => e.Id == establishmentId);
+                .FirstOrDefaultAsync(e => e.Id == establishmentId, cancellationToken);
         }
     }
 }

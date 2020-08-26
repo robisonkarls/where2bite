@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
@@ -98,7 +99,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             await _whereToBiteContext.SaveChangesAsync();
 
-            var actual = await _establishmentRepository.GetAsync(expectedEstablishment.Id);
+            var actual = await _establishmentRepository.GetAsync(expectedEstablishment.Id, CancellationToken.None);
             
             Assert.Equal(expectedEstablishment.Address, actual.Address);
             Assert.Equal(expectedEstablishment.Name, actual.Name);

@@ -52,7 +52,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
 
             expectedEstablishment.AddNewInspections(inspections);
 
-            _establishmentRepository.Add(expectedEstablishment);
+            _establishmentRepository.AddIfNotExistsAsync(expectedEstablishment, CancellationToken.None);
 
             _establishmentRepository.UnitOfWork.SaveChangesAsync();
 

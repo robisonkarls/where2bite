@@ -53,7 +53,7 @@ namespace WhereToBite.Api.ServiceWorker
                         dineSafeEstablishment.Latitude,
                         EstablishmentStatus.FromName(dineSafeEstablishment.Status));
                     
-                    _establishmentRepository.Add(establishment);
+                    await _establishmentRepository.AddIfNotExistsAsync(establishment, cancellationToken);
                 }
             }
         }

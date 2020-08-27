@@ -6,7 +6,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 {
     public interface IEstablishmentRepository : IRepository<Establishment>
     {
-        Establishment Add(Establishment establishment);
+        Task<Establishment> AddIfNotExistsAsync(Establishment establishment, CancellationToken cancellationToken);
         Task<Establishment> GetAsync(int establishmentId, CancellationToken cancellationToken);
     }
 }

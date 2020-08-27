@@ -7,7 +7,7 @@ using WhereToBite.Domain.SeedOfWork;
 
 namespace WhereToBite.Infrastructure.Repositories
 {
-    public class EstablishmentRepository : IEstablishmentRepository
+    public sealed class EstablishmentRepository : IEstablishmentRepository
     {
         private readonly WhereToBiteContext _context;
 
@@ -18,9 +18,19 @@ namespace WhereToBite.Infrastructure.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
         
-        public Establishment Add(Establishment establishment)
+        public async Task<Establishment> AddIfNotExistsAsync(Establishment establishment, CancellationToken cancellationToken)
         {
-            return _context.Establishments.Add(establishment).Entity;
+            var storedEstablishment = await _context.Establishments
+                .FirstOrDefaultAsync(e => e.DineSafeId == establishment.DineSafeId, cancellationToken);
+
+            if (storedEstablishment != null)
+            {
+                return storedEstablishment;
+            }
+            
+            var newEntry  = await _context.Establishments.AddAsync(establishment, cancellationToken);
+            
+            return newEntry.Entity;
         }
 
         public async Task<Establishment> GetAsync(int establishmentId, CancellationToken cancellationToken)

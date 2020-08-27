@@ -15,7 +15,9 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             establishmentConfiguration.Property(e => e.Name).IsRequired();
             establishmentConfiguration.Property(e => e.Status).IsRequired();
             establishmentConfiguration.Property(e => e.Type).IsRequired();
-            establishmentConfiguration.Property(e => e.DineSafeId).IsRequired();
+            establishmentConfiguration
+                .HasIndex(e => e.DineSafeId)
+                .IsUnique();
             
             var navigation = establishmentConfiguration.Metadata.FindNavigation(nameof(Establishment.Inspections));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

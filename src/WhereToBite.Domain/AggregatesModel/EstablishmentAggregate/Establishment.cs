@@ -15,22 +15,28 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public string Address { get; }
         public string Longitude { get; }
         public string Latitude { get; }
-        public EstablishmentStatus Status { get; }
+        public EstablishmentStatus EstablishmentStatus { get; }
+        private int _establishmentStatusId;
         
         public DateTime CreatedAt { get; set; }
         
         public DateTime UpdatedAt { get; set; }
 
-        public Establishment(int dineSafeId, string name, string type, string address, string longitude,
-            string latitude, EstablishmentStatus status) : this()
+        public Establishment(int dineSafeId, 
+            string name, 
+            string type, 
+            string address, 
+            string longitude,
+            string latitude, 
+            string establishmentStatus) : this()
         {
+            _establishmentStatusId = EstablishmentStatus.FromName(establishmentStatus).Id;
             DineSafeId = dineSafeId;
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Type = type ?? throw new ArgumentNullException(nameof(type));
             Address = address ?? throw new ArgumentNullException(nameof(address));
             Longitude = longitude ?? throw new ArgumentNullException(nameof(longitude));
             Latitude = latitude ?? throw new ArgumentNullException(nameof(latitude));
-            Status = status ?? throw new ArgumentNullException(nameof(status));
         }
 
         protected Establishment()

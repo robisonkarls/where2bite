@@ -6,20 +6,20 @@ using WhereToBite.Domain.SeedOfWork;
 
 namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 {
-    public class SeverityTypes : Enumeration
+    public class Severity : Enumeration
     {
-        public static SeverityTypes Minor = new SeverityTypes(1, nameof(Minor).ToLowerInvariant());
-        public static SeverityTypes Significant = new SeverityTypes(2, nameof(Significant).ToLowerInvariant());
-        public static SeverityTypes Crucial = new SeverityTypes(3, nameof(Crucial).ToLowerInvariant());
-        public static SeverityTypes NotApplicable = new SeverityTypes(4, nameof(NotApplicable).ToLowerInvariant());
+        public static Severity Minor = new Severity(1, nameof(Minor).ToLowerInvariant());
+        public static Severity Significant = new Severity(2, nameof(Significant).ToLowerInvariant());
+        public static Severity Crucial = new Severity(3, nameof(Crucial).ToLowerInvariant());
+        public static Severity NotApplicable = new Severity(4, nameof(NotApplicable).ToLowerInvariant());
 
-        public SeverityTypes(int id, string name) : base(id, name)
+        public Severity(int id, string name) : base(id, name)
         {
         }
         
-        public static IEnumerable<SeverityTypes> List() => new[] { Minor, Significant, Crucial, NotApplicable };
+        public static IEnumerable<Severity> List() => new[] { Minor, Significant, Crucial, NotApplicable };
 
-        public static SeverityTypes FromName(string name)
+        public static Severity FromName(string name)
         {
             var nameSplit = name.Split(" ");
 
@@ -36,7 +36,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
             return state ?? throw new WhereToBiteDomainException($"Possible values for Severity: {string.Join(",", List().Select(s => s.Name))}");
         }
 
-        public static SeverityTypes From(int id)
+        public static Severity From(int id)
         {
             var state = List().SingleOrDefault(s => s.Id == id);
             

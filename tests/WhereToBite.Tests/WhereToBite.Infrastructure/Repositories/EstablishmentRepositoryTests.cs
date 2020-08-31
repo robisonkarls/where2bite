@@ -34,7 +34,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
         }
 
         [Fact]
-        public void ShouldPersistEstablishment()
+        public async Task ShouldPersistEstablishment()
         {
             var expectedEstablishment = new Establishment(1,
                 "test",
@@ -42,19 +42,19 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                EstablishmentStatus.Pass);
+                "Pass");
 
-            var infraction = new Infraction(SeverityTypes.Minor, ActionTypes.Ticket, DateTime.Now, "", 0m);
-            var inspection = new Inspection(InspectionStatus.Pass, DateTime.Now);
+            var infraction = new Infraction("M - Minor", "Ticket", DateTime.Now, "", 0m);
+            var inspection = new Inspection("Pass", DateTime.Now);
             inspection.AddNewInfractions(new[] {infraction});
             var inspections = new[] {inspection};
 
 
             expectedEstablishment.AddNewInspections(inspections);
 
-            _establishmentRepository.AddIfNotExistsAsync(expectedEstablishment, CancellationToken.None);
+            await _establishmentRepository.AddIfNotExistsAsync(expectedEstablishment, CancellationToken.None);
 
-            _establishmentRepository.UnitOfWork.SaveChangesAsync();
+            await _establishmentRepository.UnitOfWork.SaveEntitiesAsync();
 
             var actualEstablishment = _whereToBiteContext.Establishments.FirstOrDefault();
 
@@ -62,7 +62,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             Assert.Equal(expectedEstablishment.DineSafeId, actualEstablishment.DineSafeId);
             Assert.Equal(expectedEstablishment.Name, actualEstablishment.Name);
             Assert.Equal(expectedEstablishment.Type, actualEstablishment.Type);
-            Assert.Equal(expectedEstablishment.Status, actualEstablishment.Status);
+            Assert.Equal(expectedEstablishment.EstablishmentStatus, actualEstablishment.EstablishmentStatus);
 
             Assert.NotEmpty(actualEstablishment.Inspections);
 
@@ -72,7 +72,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             Assert.NotNull(expectedInspection);
             Assert.NotNull(actualInspection);
             
-            Assert.Equal(expectedInspection.Status, actualInspection.Status);
+            Assert.Equal(expectedInspection.InspectionStatus, actualInspection.InspectionStatus);
 
             var expectedInfraction = expectedInspection.Infractions.FirstOrDefault();
             var actualInfraction = actualInspection.Infractions.FirstOrDefault();
@@ -80,7 +80,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             Assert.NotNull(expectedInfraction);
             Assert.NotNull(actualInfraction);
             
-            Assert.Equal(expectedInfraction.Action, actualInfraction.Action);
+            Assert.Equal(expectedInfraction.InfractionAction, actualInfraction.InfractionAction);
             Assert.Equal(expectedInfraction.Severity, actualInfraction.Severity);
             Assert.Equal(expectedInfraction.AmountFined, actualInfraction.AmountFined);
         }
@@ -94,7 +94,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                EstablishmentStatus.Pass);
+                "Pass");
 
             await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             await _whereToBiteContext.SaveChangesAsync();
@@ -104,7 +104,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             Assert.Equal(expectedEstablishment.Address, actual.Address);
             Assert.Equal(expectedEstablishment.Name, actual.Name);
             Assert.Equal(expectedEstablishment.Type, actual.Type);
-            Assert.Equal(expectedEstablishment.Status, actual.Status);
+            Assert.Equal(expectedEstablishment.EstablishmentStatus, actual.EstablishmentStatus);
         }
     }
 }

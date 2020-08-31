@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -91,7 +90,8 @@ namespace WhereToBite.Tests.WhereToBite.Core.DataExtractor.Concrete
             var actual = await client.GetEstablishmentsAsync(new Uri("http://localhost"), CancellationToken.None);
             
             Assert.NotNull(actual);
-            Assert.Equal(3, actual.Establishments.ToArray().Length);
+            Assert.NotNull(actual.Establishments);
+            Assert.Equal(3, actual.Establishments.Length);
         }
 
         [Fact]

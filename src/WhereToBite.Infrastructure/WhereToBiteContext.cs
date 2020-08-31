@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Domain.SeedOfWork;
+using WhereToBite.Infrastructure.EntityConfiguration;
 
 namespace WhereToBite.Infrastructure
 {
@@ -19,6 +20,18 @@ namespace WhereToBite.Infrastructure
         public WhereToBiteContext(DbContextOptions<WhereToBiteContext> options) : base(options)
         {
             
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new EstablishmentEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new EstablishmentStatusEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InfractionActionEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InfractionEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InspectionEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new InspectionStatusEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new SeverityEntityConfiguration());
         }
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)

@@ -17,7 +17,7 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                EstablishmentStatus.Pass);
+                "Pass");
         }
 
         [Fact]
@@ -29,7 +29,7 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
         [Fact]
         public void ShouldAddInspection()
         {
-            var inspections = new[] { new Inspection(InspectionStatus.Pass, DateTime.Now)};
+            var inspections = new[] { new Inspection("Pass", DateTime.Now)};
             
             _establishment.AddNewInspections(inspections);
             
@@ -41,12 +41,12 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
         {
             var inspections = new List<Inspection>
             {
-                new Inspection(InspectionStatus.Pass, DateTime.Now.AddHours(-2))
+                new Inspection("Pass", DateTime.Now.AddHours(-2))
             };
             
             _establishment.AddNewInspections(inspections);
             
-            inspections.Add(new Inspection(InspectionStatus.Pass, DateTime.Now));
+            inspections.Add(new Inspection("Pass", DateTime.Now));
 
             _establishment.AddNewInspections(inspections);
             

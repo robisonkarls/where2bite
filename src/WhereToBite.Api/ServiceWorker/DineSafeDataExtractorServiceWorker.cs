@@ -51,7 +51,7 @@ namespace WhereToBite.Api.ServiceWorker
                         dineSafeEstablishment.Address,
                         dineSafeEstablishment.Longitude,
                         dineSafeEstablishment.Latitude,
-                        EstablishmentStatus.FromName(dineSafeEstablishment.Status));
+                        dineSafeEstablishment.Status);
                     
                     await _establishmentRepository.AddIfNotExistsAsync(establishment, cancellationToken);
                 }

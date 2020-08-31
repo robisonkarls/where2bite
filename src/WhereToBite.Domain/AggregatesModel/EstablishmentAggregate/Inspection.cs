@@ -10,12 +10,13 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public IReadOnlyCollection<Infraction> Infractions => _infractions;
         private readonly List<Infraction> _infractions;
         
-        public InspectionStatus Status { get; }
+        public InspectionStatus InspectionStatus { get; }
+        private int _inspectionStatusId;
         public DateTime Date { get; }
 
-        public Inspection(InspectionStatus status, DateTime date) : this()
+        public Inspection(string inspectionStatus, DateTime date) : this()
         {
-            Status = status ?? throw new ArgumentNullException(nameof(status));
+            _inspectionStatusId = InspectionStatus.FromName(inspectionStatus).Id;
             Date = date;
         }
 

@@ -8,10 +8,18 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
     {
         public void Configure(EntityTypeBuilder<Inspection> inspectionConfiguration)
         {
+            inspectionConfiguration.ToTable("Inspection", WhereToBiteContext.DefaultSchema);
+            
             inspectionConfiguration.HasKey(i => i.Id);
-            inspectionConfiguration.Property(i => i.Status).IsRequired();
-            inspectionConfiguration.Property<int>("OrderId").IsRequired();
+            
+            inspectionConfiguration.Property<int>("_inspectionStatusId")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("InspectionStatusId")
+                .IsRequired();
 
+            inspectionConfiguration.HasOne(x => x.InspectionStatus)
+                .WithMany()
+                .HasForeignKey("_inspectionStatusId");
             
             var navigation = inspectionConfiguration.Metadata.FindNavigation(nameof(Inspection.Infractions));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

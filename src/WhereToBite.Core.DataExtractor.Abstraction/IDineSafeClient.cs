@@ -5,7 +5,7 @@ using WhereToBite.Core.DataExtractor.Abstraction.Models;
 
 namespace WhereToBite.Core.DataExtractor.Abstraction
 {
-    public interface IDineSafeClient
+    public interface IDineSafeClient : IDisposable
     {
         Task<DineSafeMetadata> GetMetadataAsync(CancellationToken cancellationToken);
 

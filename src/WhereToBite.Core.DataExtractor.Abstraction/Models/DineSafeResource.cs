@@ -27,7 +27,7 @@ namespace WhereToBite.Core.DataExtractor.Abstraction.Models
         [JsonPropertyName("is_preview")]
         public bool IsPreview { get; set; }
         [JsonPropertyName("last_modified")]
-        public DateTime? UpdatedAt { get; set; }
+        public DateTime? LastModified { get; set; }
         [JsonPropertyName("url_type")]
         public string UrlType { get; set; } = default!;
         [JsonPropertyName("mimetype")]

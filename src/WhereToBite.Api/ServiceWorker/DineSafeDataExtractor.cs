@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WhereToBite.Core.DataExtractor.Abstraction;
@@ -19,18 +20,22 @@ namespace WhereToBite.Api.ServiceWorker
         private readonly TimeSpan _databaseOperationTimeOut = TimeSpan.FromMinutes(30);
         private readonly ILogger<DineSafeDataExtractor> _logger;
         private readonly IDineSafeClient _dineSafeClient;
+        private readonly IMemoryCache _memoryCache;
+        private DateTime _lastModifiedDate;
 
         
         public DineSafeDataExtractor(
             IEstablishmentRepository establishmentRepository, 
             IOptions<DineSafeSettings> dineSafeSettings, 
             ILogger<DineSafeDataExtractor> logger, 
-            IDineSafeClient dineSafeClient)
+            IDineSafeClient dineSafeClient, 
+            IMemoryCache memoryCache)
         {
             _establishmentRepository = establishmentRepository ?? throw new ArgumentNullException(nameof(establishmentRepository));
             _dineSafeSettings = dineSafeSettings ?? throw new ArgumentNullException(nameof(dineSafeSettings));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _dineSafeClient = dineSafeClient ?? throw new ArgumentNullException(nameof(dineSafeClient));
+            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
         }
 
         public async void Extract(object info)
@@ -42,6 +47,9 @@ namespace WhereToBite.Api.ServiceWorker
         
         private async Task PersistDineSafeDataAsync(DineSafeData dineSafeData)
         {
+            //TODO: should stop updating and finish task for the current day
+            if (dineSafeData == null) throw new ArgumentNullException(nameof(dineSafeData));
+            
             using var databaseCts =  new CancellationTokenSource(_databaseOperationTimeOut);
             
             using (_logger.BeginScope("Begin DineSafe Data Collection"))
@@ -69,12 +77,60 @@ namespace WhereToBite.Api.ServiceWorker
             {
                 var dineSafeMetadata = await _dineSafeClient.GetMetadataAsync(cts.Token);
 
+                var lastModifiedDate = GetLastModifiedDate(dineSafeMetadata);
+
+                if (!IsDineSafeUpdated(lastModifiedDate))
+                {
+                    return null;
+                }
+
                 var url = GetDineSafeUrl(dineSafeMetadata);
 
                 return await _dineSafeClient.GetEstablishmentsAsync(url!, cts.Token);
             }
         }
-        
+
+        private bool IsDineSafeUpdated(DateTime? lastModifiedDate)
+        {
+            if (!lastModifiedDate.HasValue)
+            {
+                _logger.LogInformation($"No valid value found for LastModified date");
+                return true;
+            }
+            
+            if (_memoryCache.TryGetValue(CacheKeys.LastModifiedDate, out DateTime cachedLastModifiedDate))
+            {
+                _lastModifiedDate = cachedLastModifiedDate;
+            }
+
+            if (_lastModifiedDate < lastModifiedDate.Value)
+            {
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromHours(25));
+
+                _lastModifiedDate = _memoryCache.Set(
+                    CacheKeys.LastModifiedDate,
+                    lastModifiedDate.Value,
+                    cacheEntryOptions);
+
+                _logger.LogInformation($"Found update for DineSafe on {_lastModifiedDate}");
+            }
+            else
+            {
+                _logger.LogInformation($"No updates found for DineSafe");
+                return false;
+            }
+            
+            return true;
+        }
+
+        private DateTime? GetLastModifiedDate(DineSafeMetadata dineSafeMetadata)
+        {
+            return dineSafeMetadata.Result.Resources
+                .FirstOrDefault(x => x.Id == _dineSafeSettings.Value.DineSafeId)
+                ?.LastModified;
+        }
+
         private static IEnumerable<Inspection> ExtractInspections(DineSafeEstablishment dineSafeEstablishment)
         {
             if (dineSafeEstablishment.Inspections == null)
@@ -134,7 +190,7 @@ namespace WhereToBite.Api.ServiceWorker
         private Uri GetDineSafeUrl(DineSafeMetadata dineSafeMetadata)
         {
             return dineSafeMetadata.Result.Resources
-                .Where(r => r.PackageId == Guid.Parse(_dineSafeSettings.Value.DineSafeId))
+                .Where(r => r.PackageId == _dineSafeSettings.Value.DineSafeId)
                 .Select(r => new Uri(r.Url))
                 .FirstOrDefault();
         }

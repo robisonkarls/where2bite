@@ -1,8 +1,10 @@
-﻿namespace WhereToBite.Api
+﻿using System;
+
+namespace WhereToBite.Api
 {
     public class DineSafeSettings
     {
         public string MetadataUrl { get; set; }
-        public string DineSafeId { get; set; }
+        public Guid DineSafeId { get; set; }
     }
 }

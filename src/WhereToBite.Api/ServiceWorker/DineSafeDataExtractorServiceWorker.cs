@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace WhereToBite.Api.ServiceWorker
 {
-    public class DineSafeDataExtractorServiceWorker : IHostedService, IDisposable
+    internal sealed class DineSafeDataExtractorServiceWorker : IHostedService, IDisposable
     {
         private readonly ILogger<DineSafeDataExtractorServiceWorker> _logger;
         private readonly IDineSafeDataExtractor _dineSafeDataExtractor;

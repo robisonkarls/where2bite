@@ -4,7 +4,7 @@ using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Infrastructure.EntityConfiguration
 {
-    public class InfractionEntityConfiguration : IEntityTypeConfiguration<Infraction>
+    internal sealed class InfractionEntityConfiguration : IEntityTypeConfiguration<Infraction>
     {
         private const string SeverityFkName = "_severityId";
         private const string ActionFkName = "_infractionActionId";

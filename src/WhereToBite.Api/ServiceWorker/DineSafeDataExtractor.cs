@@ -22,7 +22,6 @@ namespace WhereToBite.Api.ServiceWorker
         private readonly IDineSafeClient _dineSafeClient;
         private readonly IMemoryCache _memoryCache;
         private DateTime _lastModifiedDate;
-
         
         public DineSafeDataExtractor(
             IEstablishmentRepository establishmentRepository, 
@@ -47,8 +46,11 @@ namespace WhereToBite.Api.ServiceWorker
         
         private async Task PersistDineSafeDataAsync(DineSafeData dineSafeData)
         {
-            //TODO: should stop updating and finish task for the current day
-            if (dineSafeData == null) throw new ArgumentNullException(nameof(dineSafeData));
+            if (dineSafeData == null)
+            {
+                _logger.LogInformation("No DineSafe Data to process");
+                return;
+            }
             
             using var databaseCts =  new CancellationTokenSource(_databaseOperationTimeOut);
             
@@ -170,11 +172,6 @@ namespace WhereToBite.Api.ServiceWorker
             return Enumerable.Empty<Infraction>();
         }
         
-        
-        
-
-        
-
         private static Establishment CreateEstablishment(DineSafeEstablishment dineSafeEstablishment)
         {
             return new Establishment(

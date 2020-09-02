@@ -4,7 +4,7 @@ using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Infrastructure.EntityConfiguration
 {
-    public class EstablishmentStatusEntityConfiguration : IEntityTypeConfiguration<EstablishmentStatus>
+    internal sealed class EstablishmentStatusEntityConfiguration : IEntityTypeConfiguration<EstablishmentStatus>
     {
         public void Configure(EntityTypeBuilder<EstablishmentStatus> establishmentStatusConfiguration)
         {

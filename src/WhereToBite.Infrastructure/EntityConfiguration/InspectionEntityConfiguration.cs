@@ -4,7 +4,7 @@ using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Infrastructure.EntityConfiguration
 {
-    public class InspectionEntityConfiguration : IEntityTypeConfiguration<Inspection>
+    internal sealed class InspectionEntityConfiguration : IEntityTypeConfiguration<Inspection>
     {
         public void Configure(EntityTypeBuilder<Inspection> inspectionConfiguration)
         {

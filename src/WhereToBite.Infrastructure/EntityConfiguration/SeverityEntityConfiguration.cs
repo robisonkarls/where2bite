@@ -4,7 +4,7 @@ using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Infrastructure.EntityConfiguration
 {
-    public class SeverityEntityConfiguration : IEntityTypeConfiguration<Severity>
+    internal sealed class SeverityEntityConfiguration : IEntityTypeConfiguration<Severity>
     {
         public void Configure(EntityTypeBuilder<Severity> severityConfiguration)
         {

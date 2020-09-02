@@ -4,7 +4,7 @@ using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Infrastructure.EntityConfiguration
 {
-    public class EstablishmentEntityConfiguration : IEntityTypeConfiguration<Establishment>
+    internal sealed class EstablishmentEntityConfiguration : IEntityTypeConfiguration<Establishment>
     {
         private const string EstablishmentStatusFkName = "_establishmentStatusId";
 

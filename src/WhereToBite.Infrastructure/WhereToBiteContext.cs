@@ -13,6 +13,7 @@ namespace WhereToBite.Infrastructure
     {
         public const string DefaultSchema = "w2b";
 
+        // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<Establishment> Establishments { get; set; }
 
         private IDbContextTransaction _currentTransaction;

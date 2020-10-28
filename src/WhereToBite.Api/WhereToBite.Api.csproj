@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\WhereToBite.Core.DataExtractor.Abstraction\WhereToBite.Core.DataExtractor.Abstraction.csproj" />
+      <ProjectReference Include="..\WhereToBite.Core.DataExtractor.Concrete\WhereToBite.Core.DataExtractor.Concrete.csproj" />
       <ProjectReference Include="..\WhereToBite.Domain\WhereToBite.Domain.csproj" />
     </ItemGroup>
 

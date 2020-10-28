@@ -1,21 +1,23 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WhereToBite.Core.DataExtractor.Abstraction;
+using WhereToBite.Core.DataExtractor.Abstraction.Exceptions;
 using WhereToBite.Core.DataExtractor.Abstraction.Models;
 
 namespace WhereToBite.Core.DataExtractor.Concrete
 {
-    internal sealed class DineSafeClient : IDineSafeClient, IDisposable
+    internal sealed class DineSafeClient : IDineSafeClient
     {
         private readonly Uri _metadataUri;
+        private readonly Uri _lastUpdateUri;
         private readonly HttpClient _httpClient;
         private readonly ILogger<DineSafeClient> _logger;
 
@@ -27,6 +29,7 @@ namespace WhereToBite.Core.DataExtractor.Concrete
             _httpClient = httpClient;
             _logger = logger;
             _metadataUri = new Uri(dineSafeSettings.Value.MetadataUrl);
+            _lastUpdateUri = new Uri(dineSafeSettings.Value.DineSafeLastUpdateUrl);
         }
 
         public async Task<DineSafeMetadata> GetMetadataAsync(CancellationToken cancellationToken)
@@ -45,7 +48,8 @@ namespace WhereToBite.Core.DataExtractor.Concrete
                 try
                 {
                     return await
-                        JsonSerializer.DeserializeAsync<DineSafeMetadata>(metadataStream, null, cancellationToken);
+                        JsonSerializer.DeserializeAsync<DineSafeMetadata>(metadataStream,
+                            cancellationToken: cancellationToken);
                 }
                 catch (JsonException exception)
                 {
@@ -80,6 +84,32 @@ namespace WhereToBite.Core.DataExtractor.Concrete
             }
         }
 
+        public async Task<DineSafeLastUpdate> GetLastUpdateAsync(CancellationToken cancellationToken)
+        {
+            using (_logger.BeginScope("Started GetLastUpdate request"))
+            {
+                _logger.LogInformation($"Requesting Url: {_lastUpdateUri.Host}");
+
+                var lastUpdateResponseStream = await GetAsync(_lastUpdateUri, cancellationToken);
+
+                if (lastUpdateResponseStream == null)
+                {
+                    throw new DineSafeLastUpdateException("Could not retrieve Last update.");
+                }
+
+                try
+                {
+                    return await JsonSerializer.DeserializeAsync<DineSafeLastUpdate>(lastUpdateResponseStream,
+                        cancellationToken: cancellationToken);
+                }
+                catch (JsonException exception)
+                {
+                    _logger.LogError($"Error: {exception}");
+                    throw;
+                }
+            }
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();
@@ -87,8 +117,6 @@ namespace WhereToBite.Core.DataExtractor.Concrete
 
         private async Task<Stream> GetAsync([NotNull] Uri uri, CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Started Request for: {uri.Host}");
-
             try
             {
                 var responseMessage = await _httpClient.GetAsync(uri, cancellationToken);

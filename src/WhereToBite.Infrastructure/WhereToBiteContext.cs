@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Domain.SeedOfWork;
@@ -17,7 +18,9 @@ namespace WhereToBite.Infrastructure
         public DbSet<Establishment> Establishments { get; set; }
 
         private IDbContextTransaction _currentTransaction;
-
+        public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
+        public bool HasActiveTransaction => _currentTransaction != null;
+        
         public WhereToBiteContext(DbContextOptions<WhereToBiteContext> options) : base(options)
         {
             
@@ -41,11 +44,7 @@ namespace WhereToBite.Infrastructure
 
             return true;
         }
-
-        public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
-
-        public bool HasActiveTransaction => _currentTransaction != null;
-
+        
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
             if (HasActiveTransaction)
@@ -95,6 +94,17 @@ namespace WhereToBite.Infrastructure
                     _currentTransaction = null;
                 }
             }
+        }
+    }
+
+    public class WhereToBiteContextDesignFactory : IDesignTimeDbContextFactory<WhereToBiteContext>
+    {
+        public WhereToBiteContext CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseNpgsql("connectionString");
+            
+            return new WhereToBiteContext(optionsBuilder.Options);
         }
     }
 }

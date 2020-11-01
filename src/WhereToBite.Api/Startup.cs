@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WhereToBite.Api.ServiceWorker;
 
 namespace WhereToBite.Api
 {
@@ -19,6 +20,8 @@ namespace WhereToBite.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMemoryCache();
+            services.AddHostedService<DineSafeDataExtractorServiceWorker>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

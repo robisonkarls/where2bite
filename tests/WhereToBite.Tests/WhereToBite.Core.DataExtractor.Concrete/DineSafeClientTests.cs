@@ -22,14 +22,19 @@ namespace WhereToBite.Tests.WhereToBite.Core.DataExtractor.Concrete
             
             var httpClient = new HttpClient(new DineMockHttpMessageHandler(HttpStatusCode.OK, payloadFileLocation));
             
-            _client = CreateDineSafeClient("http://localhost", httpClient);
+            _client = CreateDineSafeClient(httpClient);
         }
 
-        private static DineSafeClient CreateDineSafeClient(string host, HttpClient httpClient)
+        private static DineSafeClient CreateDineSafeClient(HttpClient httpClient)
         {
             var logger = NullLogger<DineSafeClient>.Instance;
 
-            var dineSafeSettings = Options.Create(new DineSafeSettings {MetadataUrl = host});
+            var dineSafeSettings = Options.Create(new DineSafeSettings
+            {
+                MetadataUrl = "http://localhost/metadataHost",
+                DineSafeId = Guid.Empty,
+                DineSafeLastUpdateUrl = "http://localhost/lastUpdateHost"
+            });
 
             return new DineSafeClient(
                 dineSafeSettings,
@@ -65,7 +70,7 @@ namespace WhereToBite.Tests.WhereToBite.Core.DataExtractor.Concrete
             var payloadFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "Setup", "metadata.json");
             var httpClient = new HttpClient(new DineMockHttpMessageHandler(HttpStatusCode.InternalServerError, payloadFileLocation));
             
-            var client = CreateDineSafeClient("http://localhost", httpClient);
+            var client = CreateDineSafeClient(httpClient);
 
             var actual = await client.GetMetadataAsync(CancellationToken.None);
             
@@ -85,7 +90,7 @@ namespace WhereToBite.Tests.WhereToBite.Core.DataExtractor.Concrete
             var payloadFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "Setup", "establishments_data.xml");
             var httpClient = new HttpClient(new DineMockHttpMessageHandler(HttpStatusCode.OK, payloadFileLocation));
             
-            var client = CreateDineSafeClient("http://localhost", httpClient);
+            var client = CreateDineSafeClient(httpClient);
 
             var actual = await client.GetEstablishmentsAsync(new Uri("http://localhost"), CancellationToken.None);
             
@@ -100,7 +105,7 @@ namespace WhereToBite.Tests.WhereToBite.Core.DataExtractor.Concrete
             var payloadFileLocation = Path.Combine(Directory.GetCurrentDirectory(), "Setup", "establishments_data.xml");
             var httpClient = new HttpClient(new DineMockHttpMessageHandler(HttpStatusCode.InternalServerError, payloadFileLocation));
             
-            var client = CreateDineSafeClient("http://localhost", httpClient);
+            var client = CreateDineSafeClient(httpClient);
 
             var actual = await client.GetEstablishmentsAsync(new Uri("http://localhost"), CancellationToken.None);
             

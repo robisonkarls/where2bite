@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using WhereToBite.Domain.SeedOfWork;
 
 namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
@@ -8,6 +9,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
     public class Establishment : Entity, IAggregateRoot
     {
         public IReadOnlyCollection<Inspection> Inspections => _inspections;
+        
         private readonly List<Inspection> _inspections;
         public int DineSafeId { get; }
         public string Name { get; }
@@ -15,7 +17,10 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public string Address { get; }
         public string Longitude { get; }
         public string Latitude { get; }
+        // ReSharper disable once UnassignedGetOnlyAutoProperty
         public EstablishmentStatus EstablishmentStatus { get; }
+        
+        [UsedImplicitly]
         private int _establishmentStatusId;
         
         public DateTime CreatedAt { get; set; }

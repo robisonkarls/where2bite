@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\WhereToBite.Api\WhereToBite.Api.csproj" />
       <ProjectReference Include="..\..\src\WhereToBite.Core.DataExtractor.Concrete\WhereToBite.Core.DataExtractor.Concrete.csproj" />
       <ProjectReference Include="..\..\src\WhereToBite.Domain\WhereToBite.Domain.csproj" />
       <ProjectReference Include="..\..\src\WhereToBite.Infrastructure\WhereToBite.Infrastructure.csproj" />

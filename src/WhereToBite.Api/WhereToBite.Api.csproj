@@ -10,5 +10,13 @@
       <ProjectReference Include="..\WhereToBite.Domain\WhereToBite.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Endpoints" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2020.2.0-eap" />
+    </ItemGroup>
+
 
 </Project>

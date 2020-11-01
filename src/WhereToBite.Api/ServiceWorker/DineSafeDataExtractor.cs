@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
+using System.Collections.Generic;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Caching.Memory;
+using WhereToBite.Core.DataExtractor.Concrete;
 using WhereToBite.Core.DataExtractor.Abstraction;
 using WhereToBite.Core.DataExtractor.Abstraction.Models;
-using WhereToBite.Core.DataExtractor.Concrete;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Api.ServiceWorker
 {
+    [UsedImplicitly]
     internal sealed class DineSafeDataExtractor : IDineSafeDataExtractor
     {
         private readonly IEstablishmentRepository _establishmentRepository;
@@ -22,7 +24,7 @@ namespace WhereToBite.Api.ServiceWorker
         private readonly ILogger<DineSafeDataExtractor> _logger;
         private readonly IDineSafeClient _dineSafeClient;
         private readonly IMemoryCache _memoryCache;
-        private DateTime _lastModifiedDate;
+        private DateTime _lastUpdate;
         
         public DineSafeDataExtractor(
             IEstablishmentRepository establishmentRepository, 
@@ -40,11 +42,52 @@ namespace WhereToBite.Api.ServiceWorker
 
         public async void Extract(object info)
         {
-            var dineSafeData = await DownloadDineSafeDataAsync();
+            using var cts = new CancellationTokenSource(_httpRequestTimeOut);
             
-            await PersistDineSafeDataAsync(dineSafeData);
+            if (await IsDineSafeOutdatedAsync(cts.Token))
+            {
+                using (_logger.BeginScope($"DineSafe update found on {DateTime.Now}"))
+                {
+                    var dineSafeData = await DownloadDineSafeDataAsync(cts.Token);
+                    
+                    await PersistDineSafeDataAsync(dineSafeData);
+                }
+            }
+            else
+            {
+                _logger.LogInformation($"No update at this time. {DateTime.Now}");   
+            }
         }
-        
+
+        private async Task<bool> IsDineSafeOutdatedAsync(CancellationToken cancellationToken)
+        {
+            var lastUpdate = await _dineSafeClient.GetLastUpdateAsync(cancellationToken);
+
+            if (_memoryCache.TryGetValue(CacheKeys.LastModifiedDate, out DateTime cachedLastModifiedDate))
+            {
+                _lastUpdate = cachedLastModifiedDate;
+            }
+
+            if (_lastUpdate < lastUpdate.LastUpdate)
+            {
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromHours(24));
+
+                _lastUpdate = _memoryCache.Set(
+                    CacheKeys.LastModifiedDate,
+                    lastUpdate.LastUpdate,
+                    cacheEntryOptions);
+
+                _logger.LogInformation($"Found update for DineSafe on {_lastUpdate}");
+            }
+            else
+            {
+                _logger.LogInformation($"No updates found for DineSafe");
+                return false;
+            }
+            return true;
+        }
+
         private async Task PersistDineSafeDataAsync(DineSafeData dineSafeData)
         {
             if (dineSafeData == null)
@@ -67,71 +110,25 @@ namespace WhereToBite.Api.ServiceWorker
                             await _establishmentRepository.AddIfNotExistsAsync(establishment, databaseCts.Token);
 
                         storedEstablishment.AddNewInspections(ExtractInspections(dineSafeEstablishment));
+
+                        await _establishmentRepository.UnitOfWork.SaveEntitiesAsync(databaseCts.Token);
+                        
+                        _logger.LogInformation($"Finished processing establishment: {establishment.Name}");
                     }
                 }
             }
         }
 
-        private async Task<DineSafeData> DownloadDineSafeDataAsync()
+        private async Task<DineSafeData> DownloadDineSafeDataAsync(CancellationToken cancellationToken)
         {
-            using var cts = new CancellationTokenSource(_httpRequestTimeOut);
-            
             using (_logger.BeginScope("Starting DineSafe Data Download"))
             {
-                var dineSafeMetadata = await _dineSafeClient.GetMetadataAsync(cts.Token);
-
-                var lastModifiedDate = GetLastModifiedDate(dineSafeMetadata);
-
-                if (!IsDineSafeUpdated(lastModifiedDate))
-                {
-                    return null;
-                }
+                var dineSafeMetadata = await _dineSafeClient.GetMetadataAsync(cancellationToken);
 
                 var url = GetDineSafeUrl(dineSafeMetadata);
 
-                return await _dineSafeClient.GetEstablishmentsAsync(url!, cts.Token);
+                return await _dineSafeClient.GetEstablishmentsAsync(url!, cancellationToken);
             }
-        }
-
-        private bool IsDineSafeUpdated(DateTime? lastModifiedDate)
-        {
-            if (!lastModifiedDate.HasValue)
-            {
-                _logger.LogInformation($"No valid value found for LastModified date");
-                return true;
-            }
-            
-            if (_memoryCache.TryGetValue(CacheKeys.LastModifiedDate, out DateTime cachedLastModifiedDate))
-            {
-                _lastModifiedDate = cachedLastModifiedDate;
-            }
-
-            if (_lastModifiedDate < lastModifiedDate.Value)
-            {
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromHours(25));
-
-                _lastModifiedDate = _memoryCache.Set(
-                    CacheKeys.LastModifiedDate,
-                    lastModifiedDate.Value,
-                    cacheEntryOptions);
-
-                _logger.LogInformation($"Found update for DineSafe on {_lastModifiedDate}");
-            }
-            else
-            {
-                _logger.LogInformation($"No updates found for DineSafe");
-                return false;
-            }
-            
-            return true;
-        }
-
-        private DateTime? GetLastModifiedDate(DineSafeMetadata dineSafeMetadata)
-        {
-            return dineSafeMetadata.Result.Resources
-                .FirstOrDefault(x => x.Id == _dineSafeSettings.Value.DineSafeId)
-                ?.LastModified;
         }
 
         private static IEnumerable<Inspection> ExtractInspections(DineSafeEstablishment dineSafeEstablishment)

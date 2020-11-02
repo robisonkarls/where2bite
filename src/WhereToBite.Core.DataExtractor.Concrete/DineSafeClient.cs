@@ -14,7 +14,7 @@ using WhereToBite.Core.DataExtractor.Abstraction.Models;
 
 namespace WhereToBite.Core.DataExtractor.Concrete
 {
-    internal sealed class DineSafeClient : IDineSafeClient
+    public sealed class DineSafeClient : IDineSafeClient
     {
         private readonly Uri _metadataUri;
         private readonly Uri _lastUpdateUri;

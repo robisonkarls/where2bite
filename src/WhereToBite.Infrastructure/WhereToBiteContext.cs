@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -97,12 +98,13 @@ namespace WhereToBite.Infrastructure
         }
     }
 
+    [UsedImplicitly]
     public class WhereToBiteContextDesignFactory : IDesignTimeDbContextFactory<WhereToBiteContext>
     {
         public WhereToBiteContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<WhereToBiteContext>()
-                .UseNpgsql("connectionString");
+                .UseNpgsql("Host=localhost;Database=dinesafe;Username=postgres;Password=genji");
             
             return new WhereToBiteContext(optionsBuilder.Options);
         }

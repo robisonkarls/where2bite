@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereToBite.Core.DataExtractor.Abstraction", "src\WhereToBite.Core.DataExtractor.Abstraction\WhereToBite.Core.DataExtractor.Abstraction.csproj", "{2D5FE193-C66A-4B3E-8501-B738D6166EA8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{F77EBC48-90D5-4D0C-9828-F6C2601E8FDC}"
+ProjectSection(SolutionItems) = preProject
+	docker-compose.yml = docker-compose.yml
+	.gitignore = .gitignore
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B61DB059-F637-4CB9-8FD7-EB15872D7114}"
 EndProject

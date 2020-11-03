@@ -10,10 +10,12 @@
       <ProjectReference Include="..\WhereToBite.Core.DataExtractor.Concrete\WhereToBite.Core.DataExtractor.Concrete.csproj" />
       <ProjectReference Include="..\WhereToBite.Domain\WhereToBite.Domain.csproj" />
       <ProjectReference Include="..\WhereToBite.Infrastructure\WhereToBite.Infrastructure.csproj" />
+      <ProjectReference Include="..\WhereToBite.Migrations\WhereToBite.Migrations.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Endpoints" />
+      <Folder Include="Infrastructure" />
     </ItemGroup>
 
     <ItemGroup>

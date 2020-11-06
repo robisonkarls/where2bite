@@ -19,7 +19,7 @@ namespace WhereToBite.Api.ServiceWorker
     {
         private readonly IEstablishmentRepository _establishmentRepository;
         private readonly IOptions<DineSafeSettings> _dineSafeSettings;
-        private readonly TimeSpan _httpRequestTimeOut = TimeSpan.FromSeconds(30);
+        private readonly TimeSpan _httpRequestTimeOut = TimeSpan.FromSeconds(180);
         private readonly TimeSpan _databaseOperationTimeOut = TimeSpan.FromMinutes(30);
         private readonly ILogger<DineSafeDataExtractor> _logger;
         private readonly IDineSafeClient _dineSafeClient;
@@ -42,20 +42,31 @@ namespace WhereToBite.Api.ServiceWorker
 
         public async void Extract(object info)
         {
-            using var cts = new CancellationTokenSource(_httpRequestTimeOut);
+            DineSafeData dineSafeData = null;
             
-            if (await IsDineSafeOutdatedAsync(cts.Token))
+            using (var cts = new CancellationTokenSource(_httpRequestTimeOut))
             {
-                using (_logger.BeginScope($"DineSafe update found on {DateTime.Now}"))
+                if (await IsDineSafeOutdatedAsync(cts.Token))
                 {
-                    var dineSafeData = await DownloadDineSafeDataAsync(cts.Token);
-                    
-                    await PersistDineSafeDataAsync(dineSafeData);
+
+                    using (_logger.BeginScope($"DineSafe update found on {DateTime.Now}"))
+                    {
+                        dineSafeData = await DownloadDineSafeDataAsync(cts.Token);
+                    }
                 }
+                else
+                {
+                    _logger.LogInformation($"No update at this time. {DateTime.Now}");   
+                }
+            }
+
+            if (dineSafeData != null)
+            {
+                await PersistDineSafeDataAsync(dineSafeData);
             }
             else
             {
-                _logger.LogInformation($"No update at this time. {DateTime.Now}");   
+                _logger.LogInformation("No DineSafe Data to process");
             }
         }
 
@@ -68,14 +79,15 @@ namespace WhereToBite.Api.ServiceWorker
                 _lastUpdate = cachedLastModifiedDate;
             }
 
-            if (_lastUpdate < lastUpdate.LastUpdate)
+            if (_lastUpdate < lastUpdate)
             {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromHours(24));
+                    .SetSlidingExpiration(TimeSpan.FromHours(24))
+                    .SetSize(1024);
 
                 _lastUpdate = _memoryCache.Set(
                     CacheKeys.LastModifiedDate,
-                    lastUpdate.LastUpdate,
+                    lastUpdate,
                     cacheEntryOptions);
 
                 _logger.LogInformation($"Found update for DineSafe on {_lastUpdate}");
@@ -90,12 +102,6 @@ namespace WhereToBite.Api.ServiceWorker
 
         private async Task PersistDineSafeDataAsync(DineSafeData dineSafeData)
         {
-            if (dineSafeData == null)
-            {
-                _logger.LogInformation("No DineSafe Data to process");
-                return;
-            }
-            
             using var databaseCts =  new CancellationTokenSource(_databaseOperationTimeOut);
             
             using (_logger.BeginScope("Begin DineSafe Data Collection"))
@@ -104,6 +110,8 @@ namespace WhereToBite.Api.ServiceWorker
                 {
                     foreach (var dineSafeEstablishment in dineSafeData.Establishments)
                     {
+                        _logger.LogInformation($"Started processing establishment: {dineSafeEstablishment.Name}");
+                        
                         var establishment = CreateEstablishment(dineSafeEstablishment);
 
                         var storedEstablishment =
@@ -160,7 +168,9 @@ namespace WhereToBite.Api.ServiceWorker
                     new Infraction(
                         x.Severity,
                         x.Action,
-                        DateTime.Parse(x._ConvictionDate),
+                        string.IsNullOrEmpty(x._ConvictionDate) 
+                            ? default
+                            : DateTime.Parse(x._ConvictionDate),
                         x.CourtOutcome,
                         decimal.TryParse(x.AmountFined, out var parsedAmountFined)
                             ? parsedAmountFined

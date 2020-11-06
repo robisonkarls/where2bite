@@ -36,7 +36,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
             CourtOutcome = courtOutcome ?? throw new ArgumentNullException(nameof(courtOutcome));
             AmountFined = amountFined;
         }
-
+        
         protected Infraction() { }
     }
 }

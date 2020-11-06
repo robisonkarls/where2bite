@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
@@ -11,6 +12,9 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             inspectionConfiguration.ToTable("Inspection", WhereToBiteContext.DefaultSchema);
             
             inspectionConfiguration.HasKey(i => i.Id);
+
+            inspectionConfiguration.Property(x => x.Date)
+                .IsRequired();
             
             inspectionConfiguration.Property<int>("_inspectionStatusId")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)

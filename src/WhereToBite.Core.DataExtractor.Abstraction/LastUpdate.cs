@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace WhereToBite.Core.DataExtractor.Abstraction
 {
     [Serializable]
     public class DineSafeLastUpdate
     {
-        public DateTime LastUpdate { get; set; }
+        [JsonPropertyName("lastUpdate")] 
+        public string? LastUpdate { get; set; }
     }
 }

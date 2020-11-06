@@ -194,11 +194,11 @@ namespace WhereToBite.Tests.WhereToBite.Api.ServiceWorker
             return Task.FromResult(dineSafeData);
         }
 
-        public Task<DineSafeLastUpdate> GetLastUpdateAsync(CancellationToken cancellationToken)
+        public Task<DateTime> GetLastUpdateAsync(CancellationToken cancellationToken)
         {
             var lastUpdate = DateTime.Today.AddDays(-1);
             
-            return Task.FromResult(new DineSafeLastUpdate {LastUpdate = lastUpdate});
+            return Task.FromResult(lastUpdate);
         }
     }
 }

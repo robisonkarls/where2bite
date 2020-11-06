@@ -11,6 +11,6 @@ namespace WhereToBite.Core.DataExtractor.Abstraction
 
         Task<DineSafeData> GetEstablishmentsAsync(Uri resourceUri, CancellationToken cancellationToken);
 
-        Task<DineSafeLastUpdate> GetLastUpdateAsync(CancellationToken cancellationToken);
+        Task<DateTime> GetLastUpdateAsync(CancellationToken cancellationToken);
     }
 }

@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 ProjectSection(SolutionItems) = preProject
 	docker-compose.yml = docker-compose.yml
 	.gitignore = .gitignore
+	NuGet.config = NuGet.config
 EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B61DB059-F637-4CB9-8FD7-EB15872D7114}"

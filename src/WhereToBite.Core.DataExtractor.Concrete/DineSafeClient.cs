@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WhereToBite.Core.DataExtractor.Abstraction;
@@ -79,12 +80,15 @@ namespace WhereToBite.Core.DataExtractor.Concrete
                 }
 
                 var serializer = new XmlSerializer(typeof(DineSafeData));
-
-                return (DineSafeData) serializer.Deserialize(establishmentsStream);
+                
+                using (var streamReader  = new StreamReader(establishmentsStream))
+                {
+                    return (DineSafeData) serializer.Deserialize(streamReader);
+                }
             }
         }
 
-        public async Task<DineSafeLastUpdate> GetLastUpdateAsync(CancellationToken cancellationToken)
+        public async Task<DateTime> GetLastUpdateAsync(CancellationToken cancellationToken)
         {
             using (_logger.BeginScope("Started GetLastUpdate request"))
             {
@@ -99,8 +103,12 @@ namespace WhereToBite.Core.DataExtractor.Concrete
 
                 try
                 {
-                    return await JsonSerializer.DeserializeAsync<DineSafeLastUpdate>(lastUpdateResponseStream,
+                    var lastUpdate =  await JsonSerializer.DeserializeAsync<DineSafeLastUpdate>(lastUpdateResponseStream,
                         cancellationToken: cancellationToken);
+
+                    return DateTime.Parse(lastUpdate.LastUpdate ??
+                                                          throw new DineSafeLastUpdateException(
+                                                              "Error parsing lastUpdate"));
                 }
                 catch (JsonException exception)
                 {

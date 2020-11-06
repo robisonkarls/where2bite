@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
@@ -25,6 +26,18 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             establishmentConfiguration.Property(e => e.Type).IsRequired();
             
             establishmentConfiguration.Property(e => e.DineSafeId).IsRequired();
+
+            establishmentConfiguration.Property(x => x.CreatedAt)
+                .HasDefaultValueSql("now()");
+            
+            establishmentConfiguration.Property(x => x.UpdatedAt)
+                .HasDefaultValueSql("now()");
+
+            establishmentConfiguration.Property(x => x.UpdatedAt)
+                .ValueGeneratedOnAddOrUpdate();
+            
+            establishmentConfiguration.Property(x => x.UpdatedAt)
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             
             establishmentConfiguration
                 .HasIndex(e => e.DineSafeId)

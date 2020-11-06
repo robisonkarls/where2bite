@@ -21,14 +21,14 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 
         public static Severity FromName(string name)
         {
-            var nameSplit = name.Split(" ");
+            var nameSplit = name.Split("-");
 
-            if (nameSplit.Length != 3)
+            if (nameSplit.Length != 2)
             {
                 throw new InvalidOperationException("Invalid data for Severity");
             }
 
-            var cleanedName = nameSplit[2].Replace(" ", "");
+            var cleanedName = nameSplit[1].Replace(" ", "");
             
             var state = List()
                 .SingleOrDefault(s => string.Equals(s.Name, cleanedName, StringComparison.CurrentCultureIgnoreCase));

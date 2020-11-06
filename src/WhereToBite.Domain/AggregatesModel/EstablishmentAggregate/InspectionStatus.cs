@@ -20,8 +20,10 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 
         public static InspectionStatus FromName(string name)
         {
+            var transformedName = name.Replace(" ", "");
+            
             var state = List()
-                .SingleOrDefault(s => string.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
+                .SingleOrDefault(s => string.Equals(s.Name, transformedName, StringComparison.CurrentCultureIgnoreCase));
             
             return state ?? throw new WhereToBiteDomainException($"Possible values for EstablishmentStatus: {string.Join(",", List().Select(s => s.Name))}");
         }

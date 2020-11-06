@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WhereToBite.Infrastructure;
@@ -9,9 +10,10 @@ using WhereToBite.Infrastructure;
 namespace WhereToBite.Infrastructure.Migrations
 {
     [DbContext(typeof(WhereToBiteContext))]
-    partial class WhereToBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20201105171722_default value for createdAt and updatedAt")]
+    partial class defaultvalueforcreatedAtandupdatedAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -99,7 +101,6 @@ namespace WhereToBite.Infrastructure.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("CourtOutcome")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int?>("InspectionId")
@@ -145,9 +146,6 @@ namespace WhereToBite.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .UseIdentityByDefaultColumn();
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int?>("EstablishmentId")
                         .HasColumnType("integer");

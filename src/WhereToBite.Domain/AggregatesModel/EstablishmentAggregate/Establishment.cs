@@ -55,15 +55,18 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         
             var inspectionList = inspections.ToList();
             
-            if (_inspections.Count <= inspectionList.Count)
+            if (_inspections.Count < inspectionList.Count)
             {
-                var lastInspectionDate = _inspections
-                    .Select(i => i.Date)
-                    .OrderByDescending(i => i.Date)
-                    .FirstOrDefault();
-                
-                var filteredInspection = inspectionList.Where(i => i.Date > lastInspectionDate);
-                _inspections.AddRange(filteredInspection);
+                if (_inspections.Any())
+                {
+                    var lastInspectionDate = _inspections.Max(x => x.Date);
+                    var filteredInspection = inspectionList.Where(i => i.Date > lastInspectionDate);
+                    _inspections.AddRange(filteredInspection);
+                }
+                else
+                {
+                    _inspections.AddRange(inspectionList);
+                }
             }
         }
     }

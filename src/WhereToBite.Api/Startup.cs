@@ -11,6 +11,7 @@ using WhereToBite.Api.ServiceWorker;
 using WhereToBite.Core.DataExtractor.Abstraction;
 using WhereToBite.Core.DataExtractor.Concrete;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
+using WhereToBite.Infrastructure;
 using WhereToBite.Infrastructure.Repositories;
 
 namespace WhereToBite.Api
@@ -38,10 +39,12 @@ namespace WhereToBite.Api
             
             services.AddSingleton<IDineSafeDataExtractor, DineSafeDataExtractor>(sp =>
             {
-                var repository = sp.GetService<IEstablishmentRepository>();
-                var logger = sp.GetService<ILogger<DineSafeDataExtractor>>();
-                var client = sp.GetService<IDineSafeClient>();
-                var cache = sp.GetService<IMemoryCache>();
+                var serviceProvider = services.BuildServiceProvider();
+                
+                var repository = serviceProvider.GetService<IEstablishmentRepository>();
+                var logger = serviceProvider.GetService<ILogger<DineSafeDataExtractor>>();
+                var client = serviceProvider.GetService<IDineSafeClient>();
+                var cache = serviceProvider.GetService<IMemoryCache>();
                 var settings = dineSafeSettings.Get<DineSafeSettings>();
                 
                 return new DineSafeDataExtractor(repository, Options.Create(settings), logger, client, cache);

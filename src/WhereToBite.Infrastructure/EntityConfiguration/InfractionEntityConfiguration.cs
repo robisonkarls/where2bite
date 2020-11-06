@@ -18,7 +18,7 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             infractionConfiguration.Property(x => x.AmountFined);
 
             infractionConfiguration.Property(x => x.CourtOutcome)
-                .IsRequired(false);
+                .IsRequired();
 
             infractionConfiguration.Property<int>(SeverityFkName)
                 .UsePropertyAccessMode(PropertyAccessMode.Field)

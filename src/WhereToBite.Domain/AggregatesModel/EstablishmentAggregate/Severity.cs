@@ -20,7 +20,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public static IEnumerable<Severity> List() => new[] { Minor, Significant, Crucial, NotApplicable };
 
         public static Severity FromName(string name)
-        {
+         {
             var nameSplit = name.Split("-");
 
             if (nameSplit.Length != 2)

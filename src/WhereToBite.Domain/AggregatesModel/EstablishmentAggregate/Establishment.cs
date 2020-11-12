@@ -60,7 +60,9 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
                 if (_inspections.Any())
                 {
                     var lastInspectionDate = _inspections.Max(x => x.Date);
+                    
                     var filteredInspection = inspectionList.Where(i => i.Date > lastInspectionDate);
+                    
                     _inspections.AddRange(filteredInspection);
                 }
                 else

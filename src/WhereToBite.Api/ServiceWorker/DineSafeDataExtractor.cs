@@ -20,7 +20,7 @@ namespace WhereToBite.Api.ServiceWorker
         private readonly IEstablishmentRepository _establishmentRepository;
         private readonly IOptions<DineSafeSettings> _dineSafeSettings;
         private readonly TimeSpan _httpRequestTimeOut = TimeSpan.FromSeconds(180);
-        private readonly TimeSpan _databaseOperationTimeOut = TimeSpan.FromMinutes(30);
+        private readonly TimeSpan _databaseOperationTimeOut = TimeSpan.FromHours(1);
         private readonly ILogger<DineSafeDataExtractor> _logger;
         private readonly IDineSafeClient _dineSafeClient;
         private readonly IMemoryCache _memoryCache;
@@ -169,7 +169,7 @@ namespace WhereToBite.Api.ServiceWorker
                         x.Severity,
                         x.Action,
                         string.IsNullOrEmpty(x._ConvictionDate) 
-                            ? default
+                            ? DateTime.MinValue
                             : DateTime.Parse(x._ConvictionDate),
                         x.CourtOutcome,
                         decimal.TryParse(x.AmountFined, out var parsedAmountFined)

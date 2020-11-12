@@ -20,7 +20,9 @@ namespace WhereToBite.Infrastructure.Repositories
         
         public async Task<Establishment> AddIfNotExistsAsync(Establishment establishment, CancellationToken cancellationToken)
         {
-            var storedEstablishment = await _context.Establishments
+            var storedEstablishment = await _context
+                .Establishments
+                .Include(x => x.Inspections)
                 .SingleOrDefaultAsync(x => x.DineSafeId == establishment.DineSafeId, cancellationToken);
 
             if (storedEstablishment != null)

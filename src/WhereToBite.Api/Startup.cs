@@ -11,7 +11,6 @@ using WhereToBite.Api.ServiceWorker;
 using WhereToBite.Core.DataExtractor.Abstraction;
 using WhereToBite.Core.DataExtractor.Concrete;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
-using WhereToBite.Infrastructure;
 using WhereToBite.Infrastructure.Repositories;
 
 namespace WhereToBite.Api

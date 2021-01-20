@@ -16,6 +16,7 @@ namespace WhereToBite.Api.Extensions
                         options.UseNpgsql(configuration["ConnectionString"],
                             sqlOptions =>
                             {
+                                sqlOptions.UseNetTopologySuite();
                                 sqlOptions.MigrationsAssembly("WhereToBite.Api");
                                 sqlOptions.EnableRetryOnFailure(15, TimeSpan.FromSeconds(15), null);
                             });

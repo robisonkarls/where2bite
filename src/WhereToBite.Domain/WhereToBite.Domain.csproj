@@ -7,6 +7,7 @@
 
     <ItemGroup>
       <PackageReference Include="JetBrains.Annotations" Version="2020.2.0-eap" />
+      <PackageReference Include="NetTopologySuite" Version="2.1.0" />
     </ItemGroup>
 
 </Project>

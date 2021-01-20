@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
+using NetTopologySuite.Geometries;
 using WhereToBite.Core.DataExtractor.Concrete;
 using WhereToBite.Core.DataExtractor.Abstraction;
 using WhereToBite.Core.DataExtractor.Abstraction.Models;
@@ -182,14 +183,15 @@ namespace WhereToBite.Api.ServiceWorker
         
         private static Establishment CreateEstablishment(DineSafeEstablishment dineSafeEstablishment)
         {
-            return new Establishment(
+            return new(
                 dineSafeEstablishment.Id,
                 dineSafeEstablishment.Name,
                 dineSafeEstablishment.Type,
                 dineSafeEstablishment.Address,
                 dineSafeEstablishment.Longitude,
                 dineSafeEstablishment.Latitude,
-                dineSafeEstablishment.Status);
+                dineSafeEstablishment.Status,
+                new Point(double.Parse(dineSafeEstablishment.Longitude), double.Parse(dineSafeEstablishment.Latitude)));
         }
 
         private Uri GetDineSafeUrl(DineSafeMetadata dineSafeMetadata)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WhereToBite.Infrastructure;
 
@@ -15,9 +16,10 @@ namespace WhereToBite.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasPostgresExtension("postgis")
                 .UseIdentityByDefaultColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.0-rc.2.20475.6");
+                .HasAnnotation("ProductVersion", "5.0.2");
 
             modelBuilder.Entity("WhereToBite.Domain.AggregatesModel.EstablishmentAggregate.Establishment", b =>
                 {
@@ -41,6 +43,9 @@ namespace WhereToBite.Infrastructure.Migrations
                     b.Property<string>("Latitude")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<Point>("Location")
+                        .HasColumnType("geometry (point)");
 
                     b.Property<string>("Longitude")
                         .IsRequired()

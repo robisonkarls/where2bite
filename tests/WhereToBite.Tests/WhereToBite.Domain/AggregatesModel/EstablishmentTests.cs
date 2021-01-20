@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NetTopologySuite.Geometries;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using Xunit;
 namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
@@ -17,7 +18,8 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                "Pass");
+                "Pass",
+                Point.Empty);
         }
 
         [Fact]

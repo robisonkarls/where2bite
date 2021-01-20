@@ -8,19 +8,19 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 {
     public class InfractionAction : Enumeration
     {
-        public static InfractionAction NoticeToComply = new InfractionAction(1, nameof(NoticeToComply).ToLowerInvariant());
-        public static InfractionAction EducationProvided = new InfractionAction(2, nameof(EducationProvided).ToLowerInvariant());
+        public static InfractionAction NoticeToComply = new(1, nameof(NoticeToComply).ToLowerInvariant());
+        public static InfractionAction EducationProvided = new(2, nameof(EducationProvided).ToLowerInvariant());
         public static InfractionAction CorrectedDuringInspection =
-            new InfractionAction(3, nameof(CorrectedDuringInspection).ToLowerInvariant());
+            new(3, nameof(CorrectedDuringInspection).ToLowerInvariant());
 
-        public static InfractionAction Summons = new InfractionAction(4, nameof(Summons).ToLowerInvariant());
+        public static InfractionAction Summons = new(4, nameof(Summons).ToLowerInvariant());
         public static InfractionAction SummonsAndHealthHazardOrder =
-            new InfractionAction(5, nameof(SummonsAndHealthHazardOrder).ToLowerInvariant());
+            new(5, nameof(SummonsAndHealthHazardOrder).ToLowerInvariant());
 
-        public static InfractionAction Ticket = new InfractionAction(6, nameof(Ticket).ToLowerInvariant());
-        public static InfractionAction NotInCompliance = new InfractionAction(7, nameof(NotInCompliance).ToLowerInvariant());
-        public static InfractionAction SummonsByLaw = new InfractionAction(8, nameof(SummonsByLaw).ToLowerInvariant());
-        public static InfractionAction ClosureOrder = new InfractionAction(9, nameof(ClosureOrder).ToLowerInvariant());
+        public static InfractionAction Ticket = new(6, nameof(Ticket).ToLowerInvariant());
+        public static InfractionAction NotInCompliance = new(7, nameof(NotInCompliance).ToLowerInvariant());
+        public static InfractionAction SummonsByLaw = new(8, nameof(SummonsByLaw).ToLowerInvariant());
+        public static InfractionAction ClosureOrder = new(9, nameof(ClosureOrder).ToLowerInvariant());
 
         public InfractionAction(int id, string name) : base(id, name)
         {

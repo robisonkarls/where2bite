@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Infrastructure;
 using WhereToBite.Infrastructure.Repositories;
@@ -42,7 +43,8 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                "Pass");
+                "Pass", 
+                Point.Empty);
 
             var infraction = new Infraction("M - Minor", "Ticket", DateTime.Now, "", 0m);
             var inspection = new Inspection("Pass", DateTime.Now);
@@ -94,7 +96,8 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 string.Empty,
                 string.Empty,
                 string.Empty,
-                "Pass");
+                "Pass",
+                Point.Empty);
 
             await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             await _whereToBiteContext.SaveChangesAsync();
@@ -105,6 +108,70 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             Assert.Equal(expectedEstablishment.Name, actual.Name);
             Assert.Equal(expectedEstablishment.Type, actual.Type);
             Assert.Equal(expectedEstablishment.EstablishmentStatus, actual.EstablishmentStatus);
+        }
+        
+        [Fact]
+        public async Task ShouldGetEstablishmentsWithinRadius()
+        {
+            var expectedEstablishment = new Establishment(1,
+                "test",
+                "Restaurant",
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                "Pass",
+                new Point(-79.45886, 43.65493 ));
+
+            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            await _whereToBiteContext.SaveChangesAsync();
+
+            var actual = await _establishmentRepository.GetAllWithinRadiusAsync(1000,new Point(-79.46377746577373, 43.655427942971166), CancellationToken.None);
+
+            var actualEstablishment = Assert.Single(actual);
+            
+            Assert.NotNull(actualEstablishment);
+            Assert.Equal(expectedEstablishment.Address, actualEstablishment.Address);
+            Assert.Equal(expectedEstablishment.Name, actualEstablishment.Name);
+            Assert.Equal(expectedEstablishment.Type, actualEstablishment.Type);
+            Assert.Equal(expectedEstablishment.EstablishmentStatus, actualEstablishment.EstablishmentStatus);
+        }
+        
+        [Fact]
+        public async Task ShouldThrowIfCenterIsNull()
+        {
+            var expectedEstablishment = new Establishment(1,
+                "test",
+                "Restaurant",
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                "Pass",
+                new Point(-79.45886, 43.65493 ));
+
+            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            
+            await _whereToBiteContext.SaveChangesAsync();
+
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _establishmentRepository.GetAllWithinRadiusAsync(1000, null!, CancellationToken.None));
+        }
+        
+        [Fact]
+        public async Task ShouldThrowIfRadiusIsZeroOrLess()
+        {
+            var expectedEstablishment = new Establishment(1,
+                "test",
+                "Restaurant",
+                string.Empty,
+                string.Empty,
+                string.Empty,
+                "Pass",
+                new Point(-79.45886, 43.65493 ));
+
+            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            
+            await _whereToBiteContext.SaveChangesAsync();
+
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _establishmentRepository.GetAllWithinRadiusAsync(0, Point.Empty, CancellationToken.None));
         }
     }
 }

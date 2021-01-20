@@ -8,10 +8,10 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 {
     public class Severity : Enumeration
     {
-        public static Severity Minor = new Severity(1, nameof(Minor).ToLowerInvariant());
-        public static Severity Significant = new Severity(2, nameof(Significant).ToLowerInvariant());
-        public static Severity Crucial = new Severity(3, nameof(Crucial).ToLowerInvariant());
-        public static Severity NotApplicable = new Severity(4, nameof(NotApplicable).ToLowerInvariant());
+        public static Severity Minor = new(1, nameof(Minor).ToLowerInvariant());
+        public static Severity Significant = new(2, nameof(Significant).ToLowerInvariant());
+        public static Severity Crucial = new(3, nameof(Crucial).ToLowerInvariant());
+        public static Severity NotApplicable = new(4, nameof(NotApplicable).ToLowerInvariant());
 
         public Severity(int id, string name) : base(id, name)
         {

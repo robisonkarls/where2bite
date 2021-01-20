@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Domain.SeedOfWork;
 
@@ -39,6 +43,23 @@ namespace WhereToBite.Infrastructure.Repositories
         {
             return await _context.Establishments
                 .FirstOrDefaultAsync(e => e.Id == establishmentId, cancellationToken);
+        }
+
+        public async Task<IReadOnlyCollection<Establishment>> GetAllWithinRadiusAsync(double radiusSizeInMeters, [NotNull] Point center, CancellationToken cancellationToken)
+        {
+            if (center == null)
+            {
+                throw new ArgumentNullException(nameof(center));
+            }
+
+            if (radiusSizeInMeters < 1)
+            {
+                throw new InvalidOperationException("Invalid radius size");
+            }
+            
+            return await _context.Establishments
+                .Where(e => e.Location.Distance(center) < radiusSizeInMeters)
+                .ToArrayAsync(cancellationToken);
         }
     }
 }

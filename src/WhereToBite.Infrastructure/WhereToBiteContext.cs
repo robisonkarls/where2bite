@@ -17,7 +17,11 @@ namespace WhereToBite.Infrastructure
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<Establishment> Establishments { get; set; }
-
+        public DbSet<EstablishmentStatus> EstablishmentStatus { get; set; }
+        public DbSet<InfractionAction> InfractionActions { get; set; }
+        public DbSet<InspectionStatus> InspectionStatus { get; set; }
+        public DbSet<Severity> Severities { get; set; }
+        
         private IDbContextTransaction _currentTransaction;
         public IDbContextTransaction GetCurrentTransaction => _currentTransaction;
         public bool HasActiveTransaction => _currentTransaction != null;
@@ -30,6 +34,7 @@ namespace WhereToBite.Infrastructure
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.HasPostgresExtension("postgis");
             modelBuilder.ApplyConfiguration(new EstablishmentEntityConfiguration());
             modelBuilder.ApplyConfiguration(new EstablishmentStatusEntityConfiguration());
             modelBuilder.ApplyConfiguration(new InfractionActionEntityConfiguration());
@@ -104,7 +109,8 @@ namespace WhereToBite.Infrastructure
         public WhereToBiteContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<WhereToBiteContext>()
-                .UseNpgsql("Host=localhost;Database=dinesafe;Username=postgres;Password=genji");
+                .UseNpgsql("Host=localhost;Database=dinesafe;Username=docker;Password=docker;Port=25432",
+                    x => x.UseNetTopologySuite());
             
             return new WhereToBiteContext(optionsBuilder.Options);
         }

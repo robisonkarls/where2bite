@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using NetTopologySuite.Geometries;
 using WhereToBite.Domain.SeedOfWork;
 
 namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
@@ -16,6 +17,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public string Type { get; }
         public string Address { get; }
         public string Longitude { get; }
+        public Point Location { get; }
         public string Latitude { get; }
         // ReSharper disable once UnassignedGetOnlyAutoProperty
         public EstablishmentStatus EstablishmentStatus { get; }
@@ -33,7 +35,8 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
             string address, 
             string longitude,
             string latitude, 
-            string establishmentStatus) : this()
+            string establishmentStatus,
+            [NotNull] Point location) : this()
         {
             _establishmentStatusId = EstablishmentStatus.FromName(establishmentStatus).Id;
             DineSafeId = dineSafeId;
@@ -42,6 +45,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
             Address = address ?? throw new ArgumentNullException(nameof(address));
             Longitude = longitude ?? throw new ArgumentNullException(nameof(longitude));
             Latitude = latitude ?? throw new ArgumentNullException(nameof(latitude));
+            Location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
         protected Establishment()

@@ -27,6 +27,9 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             
             establishmentConfiguration.Property(e => e.DineSafeId).IsRequired();
 
+            establishmentConfiguration.Property(e => e.Location)
+                .HasColumnType("geometry (point)");
+
             establishmentConfiguration.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("now()");
             

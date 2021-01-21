@@ -8,12 +8,14 @@ namespace WhereToBite.Api.Extensions
 {
     internal static class ConfigurationExtensionMethods
     {
-        public static IServiceCollection AddWhereToBiteContext(this IServiceCollection services, IConfiguration configuration)
+        public static void AddWhereToBiteContext(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration["ConnectionString"];
+            
             services.AddEntityFrameworkNpgsql()
                 .AddDbContext<WhereToBiteContext>(options =>
                     {
-                        options.UseNpgsql(configuration["ConnectionString"],
+                        options.UseNpgsql(connectionString,
                             sqlOptions =>
                             {
                                 sqlOptions.UseNetTopologySuite();
@@ -22,7 +24,6 @@ namespace WhereToBite.Api.Extensions
                             });
                     }
                 );
-            return services;
         }
     }
 }

@@ -16,8 +16,6 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
                 "test",
                 "Restaurant",
                 string.Empty,
-                string.Empty,
-                string.Empty,
                 "Pass",
                 Point.Empty);
         }

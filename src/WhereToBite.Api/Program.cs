@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -17,12 +16,13 @@ namespace WhereToBite.Api
 {
     public static class Program
     {
-        public static readonly string Namespace = typeof(Program).Namespace;
-        public static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
+        private static readonly string Namespace = typeof(Program).Namespace;
+        private static readonly string AppName = Namespace.Substring(Namespace.LastIndexOf('.', Namespace.LastIndexOf('.') - 1) + 1);
         
         public static int Main(string[] args)
         {
             var configuration = GetConfiguration();
+            
             Log.Logger = CreateSerilogLogger(configuration);
 
             try
@@ -78,7 +78,6 @@ namespace WhereToBite.Api
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false, true)
                 .AddEnvironmentVariables();
 
             return builder.Build();
@@ -96,11 +95,11 @@ namespace WhereToBite.Api
                     {
                         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
                     });
+                    
                     options.Listen(IPAddress.Any, grpcPort, listenOptions =>
                     {
                         listenOptions.Protocols = HttpProtocols.Http2;
                     });
-
                 })
                 .UseStartup<Startup>()
                 .UseContentRoot(Directory.GetCurrentDirectory())

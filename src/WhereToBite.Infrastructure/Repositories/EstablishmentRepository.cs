@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Domain.SeedOfWork;
+using WhereToBite.Infrastructure.Extensions;
 
 namespace WhereToBite.Infrastructure.Repositories
 {
@@ -52,14 +53,15 @@ namespace WhereToBite.Infrastructure.Repositories
                 throw new ArgumentNullException(nameof(center));
             }
 
-            if (radiusSizeInMeters < 1)
+            if (radiusSizeInMeters < 0)
             {
                 throw new InvalidOperationException("Invalid radius size");
             }
-            
-            return await _context.Establishments
-                .Where(e => e.Location.Distance(center) < radiusSizeInMeters)
-                .ToArrayAsync(cancellationToken);
+
+            var result =  _context.Establishments
+                .Where(e => e.Location.ProjectTo(2855).Distance(center.ProjectTo(2855)) > radiusSizeInMeters);
+
+            return await result.ToArrayAsync(cancellationToken);
         }
     }
 }

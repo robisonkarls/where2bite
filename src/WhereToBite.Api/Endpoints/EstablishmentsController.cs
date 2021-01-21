@@ -8,6 +8,8 @@ using JetBrains.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NetTopologySuite.Geometries;
+using WhereToBite.Api.Infrastructure.Mappers;
+using WhereToBite.Api.Model;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Api.Endpoints
@@ -17,41 +19,46 @@ namespace WhereToBite.Api.Endpoints
     {
         private readonly IEstablishmentRepository _establishmentRepository;
         private readonly ILogger<EstablishmentsController> _logger;
+        private readonly IDomainMapper _domainMapper;
 
-        public EstablishmentsController([NotNull] IEstablishmentRepository establishmentRepository, [NotNull] ILogger<EstablishmentsController> logger)
+        public EstablishmentsController([NotNull] IEstablishmentRepository establishmentRepository, 
+            [NotNull] ILogger<EstablishmentsController> logger,
+            [NotNull] IDomainMapper domainMapper)
         {
             _establishmentRepository = establishmentRepository ?? throw new ArgumentNullException(nameof(establishmentRepository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _domainMapper = domainMapper ?? throw new ArgumentNullException(nameof(domainMapper));
         }
         
-        // GET api/v1/[controller]/establishments
+        // GET api/v1/[controller]/nearby
         [HttpPost]
-        [Route("establishments")]
-        [ProducesResponseType(typeof(IEnumerable<Establishment>), (int)HttpStatusCode.OK)]
+        [Route("nearby")]
+        [ProducesResponseType(typeof(IEnumerable<EstablishmentResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetEstablishmentsInRadiusAsync(
-            [FromBody] EstablishmentInRadiusRequest establishmentInRadiusRequest, 
+            [FromBody] NearbyRequest nearbyRequest, 
             CancellationToken cancellationToken = default)
         {
-            if (establishmentInRadiusRequest == null)
+            if (nearbyRequest == null)
             {
-                throw new ArgumentNullException(nameof(establishmentInRadiusRequest));
+                throw new ArgumentNullException(nameof(nearbyRequest));
             }
 
-            if (establishmentInRadiusRequest.Radius <= 0)
+            if (nearbyRequest.Radius <= 0)
             {
                 return BadRequest("Radius must be greater than 0");
             }
-            _logger.LogInformation(
-                $"Searching Establishments in a radius of {establishmentInRadiusRequest.Radius}",
-                new Point(establishmentInRadiusRequest.Longitude, establishmentInRadiusRequest.Latitude));
 
-            var establishments = await _establishmentRepository.GetAllWithinRadiusAsync(
-                establishmentInRadiusRequest.Radius,
-                new Point(establishmentInRadiusRequest.Longitude, establishmentInRadiusRequest.Latitude),
-                cancellationToken);
+            var center = new Point(nearbyRequest.Longitude, nearbyRequest.Latitude);
+            var radius = nearbyRequest.Radius;
+            
+            _logger.LogInformation($"Searching Establishments in a radius of {radius}", center);
 
-            return Ok(establishments.Any() ? establishments : Enumerable.Empty<Establishment>());
+            var establishments = await _establishmentRepository.GetAllWithinRadiusAsync(radius, center, cancellationToken);
+
+            var mappedEstablishments = _domainMapper.MapEstablishmentResponses(establishments);
+
+            return Ok(mappedEstablishments.Any() ? mappedEstablishments : Enumerable.Empty<EstablishmentResponse>());
         }
     }
 }

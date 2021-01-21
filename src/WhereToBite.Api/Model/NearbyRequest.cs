@@ -1,6 +1,9 @@
-﻿namespace WhereToBite.Api.Endpoints
+﻿using System;
+
+namespace WhereToBite.Api.Model
 {
-    public class EstablishmentInRadiusRequest
+    [Serializable]
+    public class NearbyRequest
     {
         public double Radius { get; set; }
         public double Longitude { get; set; }

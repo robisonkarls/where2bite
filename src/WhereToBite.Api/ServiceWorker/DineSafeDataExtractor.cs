@@ -188,8 +188,6 @@ namespace WhereToBite.Api.ServiceWorker
                 dineSafeEstablishment.Name,
                 dineSafeEstablishment.Type,
                 dineSafeEstablishment.Address,
-                dineSafeEstablishment.Longitude,
-                dineSafeEstablishment.Latitude,
                 dineSafeEstablishment.Status,
                 new Point(double.Parse(dineSafeEstablishment.Longitude), double.Parse(dineSafeEstablishment.Latitude)));
         }

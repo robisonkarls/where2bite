@@ -41,8 +41,6 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "test",
                 "Restaurant",
                 string.Empty,
-                string.Empty,
-                string.Empty,
                 "Pass", 
                 Point.Empty);
 
@@ -94,8 +92,6 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "test",
                 "Restaurant",
                 string.Empty,
-                string.Empty,
-                string.Empty,
                 "Pass",
                 Point.Empty);
 
@@ -116,8 +112,6 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
-                string.Empty,
-                string.Empty,
                 string.Empty,
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
@@ -143,8 +137,6 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "test",
                 "Restaurant",
                 string.Empty,
-                string.Empty,
-                string.Empty,
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
 
@@ -156,13 +148,11 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
         }
         
         [Fact]
-        public async Task ShouldThrowIfRadiusIsZeroOrLess()
+        public async Task ShouldThrowIfRadiusIsLessThanZero()
         {
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
-                string.Empty,
-                string.Empty,
                 string.Empty,
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
@@ -171,7 +161,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             
             await _whereToBiteContext.SaveChangesAsync();
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _establishmentRepository.GetAllWithinRadiusAsync(0, Point.Empty, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => _establishmentRepository.GetAllWithinRadiusAsync(-1, Point.Empty, CancellationToken.None));
         }
     }
 }

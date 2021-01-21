@@ -16,9 +16,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public string Name { get; }
         public string Type { get; }
         public string Address { get; }
-        public string Longitude { get; }
         public Point Location { get; }
-        public string Latitude { get; }
         // ReSharper disable once UnassignedGetOnlyAutoProperty
         public EstablishmentStatus EstablishmentStatus { get; }
         
@@ -32,9 +30,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public Establishment(int dineSafeId, 
             string name, 
             string type, 
-            string address, 
-            string longitude,
-            string latitude, 
+            string address,
             string establishmentStatus,
             [NotNull] Point location) : this()
         {
@@ -43,14 +39,17 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Type = type ?? throw new ArgumentNullException(nameof(type));
             Address = address ?? throw new ArgumentNullException(nameof(address));
-            Longitude = longitude ?? throw new ArgumentNullException(nameof(longitude));
-            Latitude = latitude ?? throw new ArgumentNullException(nameof(latitude));
             Location = location ?? throw new ArgumentNullException(nameof(location));
         }
 
         protected Establishment()
         {
             _inspections = new List<Inspection>();
+        }
+
+        public Inspection GetLastInspection()
+        {
+            return _inspections.OrderByDescending(x => x.Date).FirstOrDefault();
         }
 
         public void AddNewInspections(IEnumerable<Inspection> inspections)

@@ -29,7 +29,7 @@ namespace WhereToBite.Api.Extensions
                     {
                         TimeSpan.FromSeconds(3),
                         TimeSpan.FromSeconds(5),
-                        TimeSpan.FromSeconds(8),
+                        TimeSpan.FromSeconds(8)
                     });
 
                 //if the sql server container is not created on run docker compose this

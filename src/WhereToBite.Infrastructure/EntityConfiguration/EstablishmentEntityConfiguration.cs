@@ -15,10 +15,6 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             
             establishmentConfiguration.HasKey(e => e.Id);
             
-            establishmentConfiguration.Property(e => e.Latitude).IsRequired();
-            
-            establishmentConfiguration.Property(e => e.Longitude).IsRequired();
-            
             establishmentConfiguration.Property(e => e.Address).IsRequired();
             
             establishmentConfiguration.Property(e => e.Name).IsRequired();
@@ -28,7 +24,7 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             establishmentConfiguration.Property(e => e.DineSafeId).IsRequired();
 
             establishmentConfiguration.Property(e => e.Location)
-                .HasColumnType("geometry (point)");
+                .HasColumnType("geography (point)");
 
             establishmentConfiguration.Property(x => x.CreatedAt)
                 .HasDefaultValueSql("now()");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using WhereToBite.Domain.SeedOfWork;
 
 namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
@@ -8,9 +9,12 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
     public class Inspection : Entity
     {
         public IReadOnlyCollection<Infraction> Infractions => _infractions;
+        
         private readonly List<Infraction> _infractions;
         
-        public InspectionStatus InspectionStatus { get; }
+        public InspectionStatus InspectionStatus => InspectionStatus.From(_inspectionStatusId);
+        
+        [UsedImplicitly]
         private int _inspectionStatusId;
         public DateTime Date { get; }
 

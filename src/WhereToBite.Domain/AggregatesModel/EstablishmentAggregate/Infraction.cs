@@ -1,13 +1,18 @@
 ﻿using System;
+using JetBrains.Annotations;
 using WhereToBite.Domain.SeedOfWork;
 
 namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 {
     public class Infraction : Entity
     {
-        public Severity Severity { get; }
+        public Severity Severity => Severity.From(_severityId);
+        
+        [UsedImplicitly]
         private int _severityId;
-        public InfractionAction InfractionAction { get; }
+        public InfractionAction InfractionAction => InfractionAction.From(_infractionActionId);
+        
+        [UsedImplicitly]
         private int _infractionActionId;
         public DateTime Date { get; }
         public string CourtOutcome { get; }

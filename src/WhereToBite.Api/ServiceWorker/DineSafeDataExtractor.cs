@@ -111,7 +111,7 @@ namespace WhereToBite.Api.ServiceWorker
                 {
                     foreach (var dineSafeEstablishment in dineSafeData.Establishments)
                     {
-                        _logger.LogInformation($"Started processing establishment: {dineSafeEstablishment.Name}");
+                        _logger.LogInformation($"Started processing establishment: {dineSafeEstablishment.Name} - {dineSafeEstablishment.Id}");
                         
                         var establishment = CreateEstablishment(dineSafeEstablishment);
 

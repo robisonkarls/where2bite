@@ -51,10 +51,10 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
             var navigation = establishmentConfiguration.Metadata.FindNavigation(nameof(Establishment.Inspections));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            establishmentConfiguration
-                .HasOne(x => x.EstablishmentStatus)
-                .WithMany()
-                .HasForeignKey(EstablishmentStatusFkName);
+            // establishmentConfiguration
+            //     .HasOne(x => x.EstablishmentStatus)
+            //     .WithMany()
+            //     .HasForeignKey(EstablishmentStatusFkName);
         }
     }
 }

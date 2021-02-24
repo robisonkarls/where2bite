@@ -40,16 +40,8 @@ namespace WhereToBite.Infrastructure.Migrations
                     b.Property<int>("DineSafeId")
                         .HasColumnType("integer");
 
-                    b.Property<string>("Latitude")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<Point>("Location")
-                        .HasColumnType("geometry (point)");
-
-                    b.Property<string>("Longitude")
-                        .IsRequired()
-                        .HasColumnType("text");
+                        .HasColumnType("geography (point)");
 
                     b.Property<string>("Name")
                         .IsRequired()

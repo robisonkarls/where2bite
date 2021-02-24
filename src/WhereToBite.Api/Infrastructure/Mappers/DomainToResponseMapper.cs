@@ -11,8 +11,8 @@ namespace WhereToBite.Api.Infrastructure.Mappers
         {
             return establishments.Select(establishment =>
             {
-                var lastInspection = establishment.GetLastInspection();
-            
+                var mappedLastInspection = MapLastInspection(establishment.GetLastInspection());
+
                 return new EstablishmentResponse
                 {
                     Address = establishment.Address,
@@ -21,14 +21,26 @@ namespace WhereToBite.Api.Infrastructure.Mappers
                     Type = establishment.Type,
                     DineSafeId = establishment.DineSafeId,
                     NumberOfInspection = establishment.Inspections.Count,
-                    LastInspection = new LastInspection
-                    {
-                        Date = lastInspection.Date,
-                        Status = lastInspection.InspectionStatus.Name,
-                        NumberOfInfractions = lastInspection.Infractions.Count
-                    }
+                    Longitude = establishment.Location.X,
+                    Latitude = establishment.Location.Y,
+                    LastInspection = mappedLastInspection
                 };
             }).ToList();
+        }
+
+        private static LastInspection MapLastInspection(Inspection inspection)
+        {
+            if (inspection == null)
+            {
+                return LastInspection.Empty;
+            }
+
+            return new LastInspection
+            {
+                Date = inspection.Date,
+                Status = inspection.InspectionStatus.Name,
+                NumberOfInfractions = inspection.Infractions.Count
+            };
         }
     }
 }

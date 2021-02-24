@@ -21,9 +21,9 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
                 .HasColumnName("InspectionStatusId")
                 .IsRequired();
 
-            inspectionConfiguration.HasOne(x => x.InspectionStatus)
-                .WithMany()
-                .HasForeignKey("_inspectionStatusId");
+            // inspectionConfiguration.HasOne(x => x.InspectionStatus)
+            //     .WithMany()
+            //     .HasForeignKey("_inspectionStatusId");
             
             var navigation = inspectionConfiguration.Metadata.FindNavigation(nameof(Inspection.Infractions));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

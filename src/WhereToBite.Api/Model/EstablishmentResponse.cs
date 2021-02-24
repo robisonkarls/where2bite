@@ -10,17 +10,22 @@ namespace WhereToBite.Api.Model
         public string Address { get; init; }
         public double Longitude { get; init; }
         public double Latitude { get; init; }
-        public string Status { get; set; }
-        public string Type { get; set; }
-        public int NumberOfInspection { get; set; }
-        public LastInspection LastInspection { get; set; }
+        public string Status { get; init; }
+        public string Type { get; init; }
+        public int NumberOfInspection { get; init; }
+        public LastInspection LastInspection { get; init; }
     }
 
     [Serializable]
     public class LastInspection
     {
-        public DateTime Date { get; set; }
-        public int NumberOfInfractions { get; set; }
-        public string Status { get; set; }
+        public DateTime Date { get; init; }
+        public int NumberOfInfractions { get; init; }
+        public string Status { get; init; }
+
+        public static LastInspection Empty => new()
+        {
+            Status = "Empty"
+        };
     }
 }

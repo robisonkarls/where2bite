@@ -109,6 +109,15 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
         [Fact]
         public async Task ShouldGetEstablishmentsWithinRadius()
         {
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("TestDb1")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+            
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
@@ -116,10 +125,10 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
 
-            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
-            await _whereToBiteContext.SaveChangesAsync();
+            await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            await whereToBiteContext.SaveChangesAsync();
 
-            var actual = await _establishmentRepository.GetAllWithinRadiusAsync(1000,new Point(-79.46377746577373, 43.655427942971166), CancellationToken.None);
+            var actual = await establishmentRepository.GetAllWithinRadiusAsync(1000,new Point(-79.46377746577373, 43.655427942971166), CancellationToken.None);
 
             var actualEstablishment = Assert.Single(actual);
             

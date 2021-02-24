@@ -17,14 +17,16 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public string Type { get; }
         public string Address { get; }
         public Point Location { get; }
-        // ReSharper disable once UnassignedGetOnlyAutoProperty
-        public EstablishmentStatus EstablishmentStatus { get; }
+        
+        public EstablishmentStatus EstablishmentStatus => EstablishmentStatus.From(_establishmentStatusId);
         
         [UsedImplicitly]
         private int _establishmentStatusId;
         
+        [UsedImplicitly]
         public DateTime CreatedAt { get; set; }
         
+        [UsedImplicitly]
         public DateTime UpdatedAt { get; set; }
 
         public Establishment(int dineSafeId, 

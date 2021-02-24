@@ -8,7 +8,7 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
     
     public class EstablishmentTests
     {
-        private Establishment _establishment;
+        private readonly Establishment _establishment;
 
         public EstablishmentTests()
         {
@@ -41,7 +41,7 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
         {
             var inspections = new List<Inspection>
             {
-                new Inspection("Pass", DateTime.Now.AddHours(-2))
+                new("Pass", DateTime.Now.AddHours(-2))
             };
             
             _establishment.AddNewInspections(inspections);
@@ -52,6 +52,21 @@ namespace WhereToBite.Tests.WhereToBite.Domain.AggregatesModel
             
             Assert.Equal(2, _establishment.Inspections.Count);
             Assert.Equal(inspections, _establishment.Inspections);
+        }
+        
+        [Fact]
+        public void ShouldReturnEmtpyCollectionIfThereIsNoInspection()
+        {
+            var establishment =  new Establishment(1,
+                "test",
+                "Restaurant",
+                string.Empty,
+                "Pass",
+                Point.Empty);
+
+            var actual = establishment.GetLastInspection();
+            
+            Assert.Null(actual);
         }
     }
 }

@@ -56,7 +56,7 @@ namespace WhereToBite.Api.Endpoints
 
             var establishments = await _establishmentRepository.GetAllWithinRadiusAsync(radius, center, cancellationToken);
 
-            var mappedEstablishments = _domainMapper.MapEstablishmentResponses(establishments);
+                var mappedEstablishments = _domainMapper.MapEstablishmentResponses(establishments);
 
             return Ok(mappedEstablishments.Any() ? mappedEstablishments : Enumerable.Empty<EstablishmentResponse>());
         }

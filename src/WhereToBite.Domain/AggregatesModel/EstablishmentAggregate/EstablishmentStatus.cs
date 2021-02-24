@@ -12,9 +12,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         public static EstablishmentStatus ConditionalPass = new(2, nameof(ConditionalPass).ToLowerInvariant());
         public static EstablishmentStatus Closed = new(3, nameof(Closed).ToLowerInvariant());
         
-        public EstablishmentStatus(int id, string name) : base(id, name)
-        {
-        }
+        public EstablishmentStatus(int id, string name) : base(id, name) { }
 
         public static IEnumerable<EstablishmentStatus> List() => new[] { Pass, ConditionalPass, Closed };
 

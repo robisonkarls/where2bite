@@ -25,18 +25,18 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
                 .HasColumnName("SeverityId")
                 .IsRequired();
 
-            infractionConfiguration.HasOne(x => x.Severity)
-                .WithMany()
-                .HasForeignKey(SeverityFkName);
+            // infractionConfiguration.HasOne(x => x.Severity)
+            //     .WithMany()
+            //     .HasForeignKey(SeverityFkName);
 
             infractionConfiguration.Property<int>(ActionFkName)
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("InfractionActionId")
                 .IsRequired();
 
-            infractionConfiguration.HasOne(x => x.InfractionAction)
-                .WithMany()
-                .HasForeignKey(ActionFkName);
+            // infractionConfiguration.HasOne(x => x.InfractionAction)
+            //     .WithMany()
+            //     .HasForeignKey(ActionFkName);
         }
     }
 }

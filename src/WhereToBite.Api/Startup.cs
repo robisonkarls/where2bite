@@ -59,7 +59,7 @@ namespace WhereToBite.Api
             services.AddScoped<IEstablishmentRepository, EstablishmentRepository>();
             services.AddScoped<IDomainMapper, DomainToResponseMapper>();
             
-            services.AddSingleton<IDineSafeDataExtractor, DineSafeDataExtractor>(sp =>
+            services.AddSingleton<IDineSafeDataExtractor, DineSafeDataExtractor>(_ =>
             {
                 var serviceProvider = services.BuildServiceProvider();
                 

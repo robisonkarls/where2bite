@@ -9,7 +9,6 @@ namespace WhereToBite.Api.Extensions
         {
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "WhereToBite - Establishments HTTP API",

@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.Geometries;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Domain.SeedOfWork;
-using WhereToBite.Infrastructure.Extensions;
 
 namespace WhereToBite.Infrastructure.Repositories
 {

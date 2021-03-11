@@ -66,7 +66,7 @@ namespace WhereToBite.Api.Infrastructure
             });
         }
 
-        private AsyncRetryPolicy CreatePolicy(ILogger<WhereToBiteContextSeed> logger, string prefix, int retries = 3)
+        private static AsyncRetryPolicy CreatePolicy(ILogger logger, string prefix, int retries = 3)
         {
             return Policy.Handle<PgSqlException>()
                 .WaitAndRetryAsync(
@@ -74,7 +74,14 @@ namespace WhereToBite.Api.Infrastructure
                     _ => TimeSpan.FromSeconds(5),
                     (exception, _, retry, _) =>
                     {
-                        logger.LogWarning(exception, "[{Prefix}] Exception {ExceptionType} with message {Message} detected on attempt {Retry} of {Retries}", prefix, exception.GetType().Name, exception.Message, retry, retries);
+                        logger.LogWarning(
+                            exception, 
+                            "[{Prefix}] Exception {ExceptionType} with message {Message} detected on attempt {Retry} of {Retries}", 
+                            prefix, 
+                            exception.GetType().Name, 
+                            exception.Message, 
+                            retry, 
+                            retries);
                     }
                 );
         }

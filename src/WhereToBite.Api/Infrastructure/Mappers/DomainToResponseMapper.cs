@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
 using WhereToBite.Api.Model;
 using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 

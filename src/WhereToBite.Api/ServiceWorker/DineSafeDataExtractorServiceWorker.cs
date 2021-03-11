@@ -24,14 +24,14 @@ namespace WhereToBite.Api.ServiceWorker
         {
             _logger.LogInformation("Timed hosted service running");
             
-            //_timer = new Timer(_dineSafeDataExtractor.Extract, null, TimeSpan.Zero, TimeSpan.FromHours(24));
+            _timer = new Timer(_dineSafeDataExtractor.Extract, null, TimeSpan.Zero, TimeSpan.FromHours(24));
 
             return Task.CompletedTask;
         }
         
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation($"Finished importing DineSafe Database at {DateTime.UtcNow}");
+            _logger.LogInformation($"Finished importing DineSafe Database at {DateTime.Now}");
             _timer.Change(Timeout.Infinite, 0);
             
             return Task.CompletedTask;

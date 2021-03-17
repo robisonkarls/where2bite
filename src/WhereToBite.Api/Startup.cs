@@ -1,21 +1,24 @@
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using WhereToBite.Api.Extensions;
-using WhereToBite.Api.Infrastructure.Filters;
-using WhereToBite.Api.Infrastructure.Mappers;
 using WhereToBite.Api.ServiceWorker;
-using WhereToBite.Core.DataExtractor.Abstraction;
+using WhereToBite.Api.Infrastructure.Mappers;
+using WhereToBite.Api.Infrastructure.Filters;
 using WhereToBite.Core.DataExtractor.Concrete;
-using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 using WhereToBite.Infrastructure.Repositories;
+using WhereToBite.Core.DataExtractor.Abstraction;
+using WhereToBite.Domain.AggregatesModel.EstablishmentAggregate;
 
 namespace WhereToBite.Api
 {
@@ -71,6 +74,26 @@ namespace WhereToBite.Api
                 
                 return new DineSafeDataExtractor(repository, Options.Create(settings), logger, client, cache);
             });
+            
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>  
+            {  
+                options.SaveToken = true;  
+                options.RequireHttpsMetadata = false;  
+                options.TokenValidationParameters = new TokenValidationParameters()  
+                {  
+                    ValidateIssuer = true,  
+                    ValidateAudience = true,  
+                    ValidAudience = Configuration["Jwt:ValidAudience"],  
+                    ValidIssuer = Configuration["Jwt:ValidIssuer"],  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Secret"]))  
+                };  
+            });  
+            
             services.AddCustomSwagger();
             services.AddHostedService<DineSafeDataExtractorServiceWorker>();
             services.AddControllers(options =>
@@ -97,6 +120,7 @@ namespace WhereToBite.Api
             
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

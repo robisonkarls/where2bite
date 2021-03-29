@@ -8,6 +8,7 @@ using Serilog;
 using System;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using WhereToBite.Api.Extensions;
 using WhereToBite.Api.Infrastructure;
 using WhereToBite.Infrastructure;
@@ -89,11 +90,16 @@ namespace WhereToBite.Api
                 .CaptureStartupErrors(false)
                 .ConfigureKestrel(options =>
                 {
-                    var (httpPort, grpcPort) = GetDefinedPorts(configuration);
+                    var (httpPort, httpsPort, grpcPort) = GetDefinedPorts(configuration);
 
                     options.Listen(IPAddress.Any, httpPort, listenOptions =>
                     {
                         listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                    });
+                    
+                    options.Listen(IPAddress.Any, httpsPort, listenOptions =>
+                    {
+                        listenOptions.UseHttps(FindMatchingCertificateBySubject("localhost"));
                     });
                     
                     options.Listen(IPAddress.Any, grpcPort, listenOptions =>
@@ -105,11 +111,38 @@ namespace WhereToBite.Api
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .Build();
         
-        private static (int httpPort, int grpcPort) GetDefinedPorts(IConfiguration config)
+        private static (int httpPort, int httpsPort, int grpcPort) GetDefinedPorts(IConfiguration config)
         {
+            var httpPort = config.GetValue("HTTP_PORT", 80);
+            var httpsPort = config.GetValue("HTTPS_PORT", 443);
             var grpcPort = config.GetValue("GRPC_PORT", 81);
-            var port = config.GetValue("PORT", 80);
-            return (port, grpcPort);
+            
+            return (httpPort, httpsPort, grpcPort);
+        }
+        
+        private static X509Certificate2 FindMatchingCertificateBySubject(string subjectCommonName)
+        {
+            using var store = new X509Store(StoreName.My, StoreLocation.LocalMachine);
+            store.Open(OpenFlags.OpenExistingOnly | OpenFlags.ReadOnly);
+            var certCollection = store.Certificates;
+            var matchingCerts = new X509Certificate2Collection();
+    
+            foreach (var enumeratedCert in certCollection)
+            {
+                if (StringComparer.OrdinalIgnoreCase.Equals(subjectCommonName, enumeratedCert.GetNameInfo(X509NameType.SimpleName, forIssuer: false))
+                    && DateTime.Now < enumeratedCert.NotAfter
+                    && DateTime.Now >= enumeratedCert.NotBefore)
+                {
+                    matchingCerts.Add(enumeratedCert);
+                }
+            }
+
+            if (matchingCerts.Count == 0)
+            {
+                throw new Exception($"Could not find a match for a certificate with subject 'CN={subjectCommonName}'.");
+            }
+        
+            return matchingCerts[0];
         }
     }
 }

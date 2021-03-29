@@ -84,12 +84,12 @@ namespace WhereToBite.Api
             {  
                 options.SaveToken = true;  
                 options.RequireHttpsMetadata = false;  
-                options.TokenValidationParameters = new TokenValidationParameters()  
+                options.TokenValidationParameters = new TokenValidationParameters
                 {  
                     ValidateIssuer = true,  
                     ValidateAudience = true,  
                     ValidAudience = Configuration["Jwt:ValidAudience"],  
-                    ValidIssuer = Configuration["Jwt:ValidIssuer"],  
+                    ValidIssuer = Configuration["Jwt:ValidIssuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Secret"]))  
                 };  
             });  

@@ -54,11 +54,11 @@ namespace WhereToBite.Api.Endpoints
             var center = new Point(nearbyRequest.Longitude, nearbyRequest.Latitude);
             var radius = nearbyRequest.Radius;
             
-            _logger.LogInformation($"Searching Establishments in a radius of {radius}", center);
+            _logger.LogInformation($"Searching Establishments in a radius of {radius} FROM {center}");
 
             var establishments = await _establishmentRepository.GetAllWithinRadiusAsync(radius, center, cancellationToken);
 
-                var mappedEstablishments = _domainMapper.MapEstablishmentResponses(establishments);
+            var mappedEstablishments = _domainMapper.MapEstablishmentResponses(establishments);
 
             return Ok(mappedEstablishments.Any() ? mappedEstablishments : Enumerable.Empty<EstablishmentResponse>());
         }

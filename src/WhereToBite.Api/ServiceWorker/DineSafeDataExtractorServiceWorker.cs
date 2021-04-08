@@ -24,7 +24,7 @@ namespace WhereToBite.Api.ServiceWorker
         {
             _logger.LogInformation("Timed hosted service running");
             
-            //_timer = new Timer(_dineSafeDataExtractor.Extract, null, TimeSpan.Zero, TimeSpan.FromHours(24));
+            _timer = new Timer(_dineSafeDataExtractor.Extract, null, TimeSpan.Zero, TimeSpan.FromHours(24));
 
             return Task.CompletedTask;
         }

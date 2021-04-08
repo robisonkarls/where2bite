@@ -37,7 +37,7 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
         [Fact]
         public async Task ShouldPersistEstablishment()
         {
-            var expectedEstablishment = new Establishment(3,
+            var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
                 string.Empty,

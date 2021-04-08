@@ -13,30 +13,31 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
 {
     public class EstablishmentRepositoryTests
     {
-        private readonly EstablishmentRepository _establishmentRepository;
-        private readonly WhereToBiteContext _whereToBiteContext;
-
-        public EstablishmentRepositoryTests()
-        {
-            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
-                .UseInMemoryDatabase("TestDb")
-                .Options;
-
-            _whereToBiteContext = new WhereToBiteContext(options);
-
-
-            _establishmentRepository = new EstablishmentRepository(_whereToBiteContext);
-        }
-
         [Fact]
         public void ShouldCreateInstance()
         {
-            Assert.NotNull(_establishmentRepository);
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("test1")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+            
+            Assert.NotNull(establishmentRepository);
         }
 
-        [Fact(Skip = "pipeline error")]
+        [Fact]
         public async Task ShouldPersistEstablishment()
         {
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("test2")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+            
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
@@ -52,11 +53,11 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
 
             expectedEstablishment.AddNewInspections(inspections);
 
-            await _establishmentRepository.AddIfNotExistsAsync(expectedEstablishment, CancellationToken.None);
+            await establishmentRepository.AddIfNotExistsAsync(expectedEstablishment, CancellationToken.None);
 
-            await _establishmentRepository.UnitOfWork.SaveEntitiesAsync();
+            await establishmentRepository.UnitOfWork.SaveEntitiesAsync();
 
-            var actualEstablishment = _whereToBiteContext.Establishments.FirstOrDefault();
+            var actualEstablishment = whereToBiteContext.Establishments.FirstOrDefault();
 
             Assert.NotNull(actualEstablishment);
             Assert.Equal(expectedEstablishment.DineSafeId, actualEstablishment.DineSafeId);
@@ -88,6 +89,14 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
         [Fact]
         public async Task ShouldGetSavedEstablishment()
         {
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("test3")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
@@ -95,22 +104,22 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "Pass",
                 Point.Empty);
 
-            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
-            await _whereToBiteContext.SaveChangesAsync();
+            await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            await whereToBiteContext.SaveChangesAsync();
 
-            var actual = await _establishmentRepository.GetAsync(expectedEstablishment.Id, CancellationToken.None);
+            var actual = await establishmentRepository.GetAsync(expectedEstablishment.Id, CancellationToken.None);
             
             Assert.Equal(expectedEstablishment.Address, actual.Address);
             Assert.Equal(expectedEstablishment.Name, actual.Name);
             Assert.Equal(expectedEstablishment.Type, actual.Type);
             Assert.Equal(expectedEstablishment.EstablishmentStatus, actual.EstablishmentStatus);
         }
-        
+
         [Fact]
         public async Task ShouldGetEstablishmentsWithinRadius()
         {
             var options = new DbContextOptionsBuilder<WhereToBiteContext>()
-                .UseInMemoryDatabase("TestDb1")
+                .UseInMemoryDatabase("test4")
                 .Options;
 
             var whereToBiteContext = new WhereToBiteContext(options);
@@ -142,6 +151,15 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
         [Fact]
         public async Task ShouldThrowIfCenterIsNull()
         {
+            
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("test5")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+            
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
@@ -149,16 +167,24 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
 
-            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             
-            await _whereToBiteContext.SaveChangesAsync();
+            await whereToBiteContext.SaveChangesAsync();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _establishmentRepository.GetAllWithinRadiusAsync(1000, null!, CancellationToken.None));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => establishmentRepository.GetAllWithinRadiusAsync(1000, null!, CancellationToken.None));
         }
         
         [Fact]
         public async Task ShouldThrowIfRadiusIsLessThanZero()
         {
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("test6")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+            
             var expectedEstablishment = new Establishment(1,
                 "test",
                 "Restaurant",
@@ -166,11 +192,11 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
 
-            await _whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             
-            await _whereToBiteContext.SaveChangesAsync();
+            await whereToBiteContext.SaveChangesAsync();
 
-            await Assert.ThrowsAsync<InvalidOperationException>(() => _establishmentRepository.GetAllWithinRadiusAsync(-1, Point.Empty, CancellationToken.None));
+            await Assert.ThrowsAsync<InvalidOperationException>(() => establishmentRepository.GetAllWithinRadiusAsync(-1, Point.Empty, CancellationToken.None));
         }
     }
 }

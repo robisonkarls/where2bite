@@ -6,6 +6,11 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereToBite.Core.DataExtractor.Abstraction", "src\WhereToBite.Core.DataExtractor.Abstraction\WhereToBite.Core.DataExtractor.Abstraction.csproj", "{2D5FE193-C66A-4B3E-8501-B738D6166EA8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{F77EBC48-90D5-4D0C-9828-F6C2601E8FDC}"
+ProjectSection(SolutionItems) = preProject
+	docker-compose.yml = docker-compose.yml
+	.gitignore = .gitignore
+	NuGet.config = NuGet.config
+EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B61DB059-F637-4CB9-8FD7-EB15872D7114}"
 EndProject
@@ -18,6 +23,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereToBite.Tests", "tests\WhereToBite.Tests\WhereToBite.Tests.csproj", "{3A780462-4A26-402A-8E38-D36F98222731}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereToBite.Api", "src\WhereToBite.Api\WhereToBite.Api.csproj", "{D74D9A0E-22B2-486F-B6AE-ECC493C6D264}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WhereToBite.Infrastructure", "WhereToBite.Infrastructure", "{DB15AF26-AF42-485E-AAB1-C65B8BD88DC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WhereToBite.Domain", "WhereToBite.Domain", "{630A702A-2F6C-4341-9356-0B61CDD4A802}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereToBite.Domain", "src\WhereToBite.Domain\WhereToBite.Domain.csproj", "{4AD62CBB-DD20-433A-9F87-EABA1889C37E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereToBite.Infrastructure", "src\WhereToBite.Infrastructure\WhereToBite.Infrastructure.csproj", "{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +93,30 @@ Global
 		{D74D9A0E-22B2-486F-B6AE-ECC493C6D264}.Release|x64.Build.0 = Release|Any CPU
 		{D74D9A0E-22B2-486F-B6AE-ECC493C6D264}.Release|x86.ActiveCfg = Release|Any CPU
 		{D74D9A0E-22B2-486F-B6AE-ECC493C6D264}.Release|x86.Build.0 = Release|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Debug|x64.Build.0 = Debug|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Debug|x86.Build.0 = Debug|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Release|x64.ActiveCfg = Release|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Release|x64.Build.0 = Release|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Release|x86.ActiveCfg = Release|Any CPU
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E}.Release|x86.Build.0 = Release|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Debug|x64.Build.0 = Debug|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Debug|x86.Build.0 = Debug|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Release|x64.ActiveCfg = Release|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Release|x64.Build.0 = Release|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Release|x86.ActiveCfg = Release|Any CPU
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{30862705-CA89-4342-9FE7-9EBC0D3DB00C} = {B61DB059-F637-4CB9-8FD7-EB15872D7114}
@@ -87,5 +124,9 @@ Global
 		{1A92454A-D3A8-43AA-B169-1649777AF565} = {30862705-CA89-4342-9FE7-9EBC0D3DB00C}
 		{3A780462-4A26-402A-8E38-D36F98222731} = {4864BC54-8002-4B87-8DA9-FB98BF1AC7F3}
 		{D74D9A0E-22B2-486F-B6AE-ECC493C6D264} = {B61DB059-F637-4CB9-8FD7-EB15872D7114}
+		{DB15AF26-AF42-485E-AAB1-C65B8BD88DC6} = {B61DB059-F637-4CB9-8FD7-EB15872D7114}
+		{630A702A-2F6C-4341-9356-0B61CDD4A802} = {B61DB059-F637-4CB9-8FD7-EB15872D7114}
+		{4AD62CBB-DD20-433A-9F87-EABA1889C37E} = {630A702A-2F6C-4341-9356-0B61CDD4A802}
+		{BD58E79B-3C71-4D37-AEDD-C1C92AC1CA3C} = {DB15AF26-AF42-485E-AAB1-C65B8BD88DC6}
 	EndGlobalSection
 EndGlobal

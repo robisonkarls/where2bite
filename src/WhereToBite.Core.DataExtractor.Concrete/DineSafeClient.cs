@@ -1,50 +1,121 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WhereToBite.Core.DataExtractor.Abstraction;
+using WhereToBite.Core.DataExtractor.Abstraction.Exceptions;
 using WhereToBite.Core.DataExtractor.Abstraction.Models;
 
 namespace WhereToBite.Core.DataExtractor.Concrete
 {
-    internal sealed class DineSafeClient : IDineSafeClient, IDisposable
+    public sealed class DineSafeClient : IDineSafeClient
     {
         private readonly Uri _metadataUri;
+        private readonly Uri _lastUpdateUri;
         private readonly HttpClient _httpClient;
         private readonly ILogger<DineSafeClient> _logger;
 
         public DineSafeClient(
-            [NotNull]IOptions<DineSafeSettings> dineSafeSettings, 
-            [NotNull]HttpClient httpClient, 
-            [NotNull]ILogger<DineSafeClient> logger)
+            [NotNull] IOptions<DineSafeSettings> dineSafeSettings,
+            [NotNull] HttpClient httpClient,
+            [NotNull] ILogger<DineSafeClient> logger)
         {
             _httpClient = httpClient;
             _logger = logger;
             _metadataUri = new Uri(dineSafeSettings.Value.MetadataUrl);
+            _lastUpdateUri = new Uri(dineSafeSettings.Value.DineSafeLastUpdateUrl);
         }
-        
+
         public async Task<DineSafeMetadata> GetMetadataAsync(CancellationToken cancellationToken)
         {
             using (_logger.BeginScope("Started Metadata Request"))
             {
                 _logger.LogInformation($"URL: {_metadataUri.Host} ");
-                return await GetAsync<DineSafeMetadata>(_metadataUri, cancellationToken);
+
+                var metadataStream = await GetAsync(_metadataUri, cancellationToken);
+
+                if (metadataStream == null)
+                {
+                    return null;
+                }
+
+                try
+                {
+                    return await
+                        JsonSerializer.DeserializeAsync<DineSafeMetadata>(metadataStream,
+                            cancellationToken: cancellationToken);
+                }
+                catch (JsonException exception)
+                {
+                    _logger.LogError($"Error: {exception}");
+                    throw;
+                }
             }
         }
 
-        public Task<DineSafeEstablishment> GetEstablishmentsAsync([NotNull] Uri resourceUri, CancellationToken cancellationToken)
+        public async Task<DineSafeData> GetEstablishmentsAsync([NotNull] Uri resourceUri,
+            CancellationToken cancellationToken)
         {
             if (resourceUri == null)
             {
                 throw new ArgumentNullException(nameof(resourceUri));
             }
-            
-            throw new NotImplementedException();
+
+            using (_logger.BeginScope("Started Establishments Request"))
+            {
+                _logger.LogInformation($"URL: {resourceUri.Host}");
+
+                var establishmentsStream = await GetAsync(resourceUri, cancellationToken);
+
+                if (establishmentsStream == null)
+                {
+                    return null;
+                }
+
+                var serializer = new XmlSerializer(typeof(DineSafeData));
+                
+                using (var streamReader  = new StreamReader(establishmentsStream))
+                {
+                    return (DineSafeData) serializer.Deserialize(streamReader);
+                }
+            }
+        }
+
+        public async Task<DateTime> GetLastUpdateAsync(CancellationToken cancellationToken)
+        {
+            using (_logger.BeginScope("Started GetLastUpdate request"))
+            {
+                _logger.LogInformation($"Requesting Url: {_lastUpdateUri.Host}");
+
+                var lastUpdateResponseStream = await GetAsync(_lastUpdateUri, cancellationToken);
+
+                if (lastUpdateResponseStream == null)
+                {
+                    throw new DineSafeLastUpdateException("Could not retrieve Last update.");
+                }
+
+                try
+                {
+                    var lastUpdate =  await JsonSerializer.DeserializeAsync<DineSafeLastUpdate>(lastUpdateResponseStream,
+                        cancellationToken: cancellationToken);
+
+                    return DateTime.Parse(lastUpdate.LastUpdate ??
+                                                          throw new DineSafeLastUpdateException(
+                                                              "Error parsing lastUpdate"));
+                }
+                catch (JsonException exception)
+                {
+                    _logger.LogError($"Error: {exception}");
+                    throw;
+                }
+            }
         }
 
         public void Dispose()
@@ -52,40 +123,25 @@ namespace WhereToBite.Core.DataExtractor.Concrete
             _httpClient.Dispose();
         }
 
-        private async Task<T> GetAsync<T>(Uri uri, CancellationToken cancellationToken)
+        private async Task<Stream> GetAsync([NotNull] Uri uri, CancellationToken cancellationToken)
         {
-            using var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            _logger.LogInformation("Started Request");
-
-            Stream responseStream;
-            
             try
             {
-                var responseMessage = await _httpClient.GetAsync(uri, tokenSource.Token);
-                
-                if (!responseMessage.IsSuccessStatusCode)
+                var responseMessage = await _httpClient.GetAsync(uri, cancellationToken);
+
+                if (responseMessage.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"Error requesting for {uri.Host}");
-                    _logger.LogError($"Request Failed: {responseMessage.ReasonPhrase}");
-                    return default;
+                    _logger.LogInformation($"Request completed");
+                    return await responseMessage.Content.ReadAsStreamAsync();
                 }
-                
-                responseStream = await responseMessage.Content.ReadAsStreamAsync();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError($"Error: {e.Message}");
-                throw;
-            }
 
-            try
-            {
-                _logger.LogInformation("Request completed");
-                return await JsonSerializer.DeserializeAsync<T>(responseStream, null, tokenSource.Token);
+                _logger.LogError($"Failed: {responseMessage.ReasonPhrase}");
+
+                return default;
             }
-            catch (JsonException e)
+            catch (HttpRequestException exception)
             {
-                _logger.LogError($"Error: {e.Message}");
+                _logger.LogError($"Failed: {exception.Message}");
                 throw;
             }
         }

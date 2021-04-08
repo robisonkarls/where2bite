@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 
 namespace WhereToBite.Core.DataExtractor.Abstraction.Models
 {
@@ -21,6 +20,6 @@ namespace WhereToBite.Core.DataExtractor.Abstraction.Models
         [XmlElement(ElementName="STATUS")]
         public string Status { get; set; } = default!;
         [XmlElement(ElementName="INSPECTION")]
-        public IReadOnlyList<DineSafeInspection>? Inspections { get; set; }
+        public DineSafeInspection[]? Inspections { get; set; }
     }
 }

@@ -5,10 +5,12 @@ using WhereToBite.Core.DataExtractor.Abstraction.Models;
 
 namespace WhereToBite.Core.DataExtractor.Abstraction
 {
-    public interface IDineSafeClient
+    public interface IDineSafeClient : IDisposable
     {
         Task<DineSafeMetadata> GetMetadataAsync(CancellationToken cancellationToken);
 
-        Task<DineSafeEstablishment> GetEstablishmentsAsync(Uri resourceUri, CancellationToken cancellationToken);
+        Task<DineSafeData> GetEstablishmentsAsync(Uri resourceUri, CancellationToken cancellationToken);
+
+        Task<DateTime> GetLastUpdateAsync(CancellationToken cancellationToken);
     }
 }

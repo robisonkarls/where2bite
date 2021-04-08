@@ -9,6 +9,6 @@ namespace WhereToBite.Core.DataExtractor.Abstraction.Models
     public sealed class DineSafeData
     {
         [XmlElement(ElementName="ESTABLISHMENT", IsNullable = false)]
-        public IReadOnlyCollection<DineSafeEstablishment>? Establishments { get; set; }
+        public DineSafeEstablishment[]? Establishments { get; set; }
     }
 }

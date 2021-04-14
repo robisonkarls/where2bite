@@ -188,7 +188,8 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
 
             var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
             
-            var expectedEstablishment = new Establishment(1,
+            var expectedEstablishment = new Establishment(
+                1,
                 "test",
                 "Restaurant",
                 string.Empty,

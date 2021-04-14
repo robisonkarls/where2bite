@@ -124,10 +124,10 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
 
             var whereToBiteContext = new WhereToBiteContext(options);
 
-
             var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
             
-            var expectedEstablishment = new Establishment(1,
+            var expectedEstablishment = new Establishment(
+                1,
                 "test",
                 "Restaurant",
                 string.Empty,
@@ -137,7 +137,10 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             await whereToBiteContext.SaveChangesAsync();
 
-            var actual = await establishmentRepository.GetAllWithinRadiusAsync(1000,new Point(-79.46377746577373, 43.655427942971166), CancellationToken.None);
+            var actual = await establishmentRepository.GetAllWithinRadiusAsync(
+                1000, 
+                new Point(-79.46377746577373, 43.655427942971166), 
+                CancellationToken.None);
 
             var actualEstablishment = Assert.Single(actual);
             

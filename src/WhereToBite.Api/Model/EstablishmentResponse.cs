@@ -12,7 +12,7 @@ namespace WhereToBite.Api.Model
         public double Latitude { get; init; }
         public string Status { get; init; }
         public string Type { get; init; }
-        public int NumberOfInspection { get; init; }
+        public int NumberOfInspections { get; init; }
         public LastInspection LastInspection { get; init; }
     }
 

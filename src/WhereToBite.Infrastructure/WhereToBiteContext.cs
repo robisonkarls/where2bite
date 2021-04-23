@@ -109,7 +109,7 @@ namespace WhereToBite.Infrastructure
         public WhereToBiteContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<WhereToBiteContext>()
-                .UseNpgsql("Host=localhost;Database=dinesafe;Username=docker;Password=docker;Port=25432",
+                .UseNpgsql("Host=192.168.2.233;Database=dinesafe;Username=docker;Password=docker;Port=25432",
                     x => x.UseNetTopologySuite());
             
             return new WhereToBiteContext(optionsBuilder.Options);

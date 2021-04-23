@@ -20,7 +20,7 @@ namespace WhereToBite.Api.Infrastructure.Mappers
                     Status = establishment.EstablishmentStatus.Name,
                     Type = establishment.Type,
                     DineSafeId = establishment.DineSafeId,
-                    NumberOfInspection = establishment.Inspections.Count,
+                    NumberOfInspections = establishment.Inspections.Count,
                     Longitude = establishment.Location.X,
                     Latitude = establishment.Location.Y,
                     LastInspection = mappedLastInspection

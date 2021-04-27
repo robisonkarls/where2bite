@@ -9,5 +9,6 @@ namespace WhereToBite.Api.Model
         public DateTime ConvictionDate { get; set; }
         public string CourtOutcome { get; set; }
         public decimal AmountFined { get; set; }
+        public string Action { get; set; }
     }
 }

@@ -36,14 +36,15 @@ namespace WhereToBite.Api.Infrastructure.Mappers
             {
                 return new InspectionResponse
                 {
-                    InspectionDate = inspection.Date,
-                    InspectionStatus = inspection.InspectionStatus.Name,
+                    Date = inspection.Date,
+                    Status = inspection.InspectionStatus.Name,
                     Infractions = inspection.Infractions.Select(infraction => new InfractionResponse
                     {
                         ConvictionDate = infraction.ConvictionDate,
                         Severity = infraction.Severity.Name,
                         AmountFined = infraction.AmountFined,
-                        CourtOutcome = infraction.CourtOutcome
+                        CourtOutcome = infraction.CourtOutcome,
+                        Action = infraction.InfractionAction.Name
                     })
                 };
             }).ToList();

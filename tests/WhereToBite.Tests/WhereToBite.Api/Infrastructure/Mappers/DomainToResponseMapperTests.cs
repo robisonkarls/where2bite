@@ -121,8 +121,8 @@ namespace WhereToBite.Tests.WhereToBite.Api.Infrastructure.Mappers
             // assert
             var actualInspection = Assert.Single(actual);
             Assert.NotNull(actualInspection);
-            Assert.Equal(expectedInspection.Date, actualInspection.InspectionDate);
-            Assert.Equal(expectedInspection.InspectionStatus.Name, actualInspection.InspectionStatus);
+            Assert.Equal(expectedInspection.Date, actualInspection.Date);
+            Assert.Equal(expectedInspection.InspectionStatus.Name, actualInspection.Status);
             Assert.Equal(expectedInspection.Infractions.Count, actualInspection.Infractions.Count());
         }
     }

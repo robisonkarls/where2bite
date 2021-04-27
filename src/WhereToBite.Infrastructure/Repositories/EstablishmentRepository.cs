@@ -57,14 +57,11 @@ namespace WhereToBite.Infrastructure.Repositories
                 throw new InvalidOperationException("Invalid radius size");
             }
 
-            var result = await _context.Establishments
+            return await _context.Establishments
                 .Where(e => e.Location.IsWithinDistance(center, radiusSizeInMeters))
                 .Include(x => x.Inspections)
                 .ThenInclude(x => x.Infractions)
-                .AsSingleQuery()
-                .ToArrayAsync(cancellationToken);
-
-            return result;
+                .ToListAsync(cancellationToken);;
         }
     }
 }

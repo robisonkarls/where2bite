@@ -32,7 +32,7 @@ namespace WhereToBite.Api.Endpoints
             _domainMapper = domainMapper ?? throw new ArgumentNullException(nameof(domainMapper));
         }
         
-        // GET api/v1/[controller]/nearby
+        // POST api/v1/[controller]/
         [HttpPost]
         [Route("nearby")]
         [ProducesResponseType(typeof(IEnumerable<EstablishmentResponse>), (int)HttpStatusCode.OK)]
@@ -61,6 +61,19 @@ namespace WhereToBite.Api.Endpoints
             var mappedEstablishments = _domainMapper.MapEstablishmentResponses(establishments);
 
             return Ok(mappedEstablishments.Any() ? mappedEstablishments : Enumerable.Empty<EstablishmentResponse>());
+        }
+        
+        // POST api/v1/[controller]/{establishmentId}/inspections
+        [HttpGet]
+        [Route("{establishmentId:int}/inspections")]
+        [ProducesResponseType(typeof(IEnumerable<InspectionResponse>), (int) HttpStatusCode.OK)]
+        public async Task<IActionResult> GetInspectionsAsync(int establishmentId, CancellationToken cancellationToken = default)
+        {
+            _logger.LogInformation($"Getting Inspections for EstablishmentId ${establishmentId}");
+
+            var inspections = await _establishmentRepository.GetInspectionsAsync(establishmentId, cancellationToken);
+
+            return Ok(inspections.Any() ? _domainMapper.MapInspectionResponses(inspections) : Enumerable.Empty<InspectionResponse>());
         }
     }
 }

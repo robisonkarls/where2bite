@@ -50,7 +50,7 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
 
             establishmentConfiguration
                 .HasMany(x => x.Inspections)
-                .WithOne();
+                .WithOne(x => x.Establishment);
             
             var navigation = establishmentConfiguration.Metadata.FindNavigation(nameof(Establishment.Inspections));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);

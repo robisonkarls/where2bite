@@ -7,5 +7,6 @@ namespace WhereToBite.Api.Infrastructure.Mappers
     public interface IDomainMapper
     {
         IReadOnlyList<EstablishmentResponse> MapEstablishmentResponses(IEnumerable<Establishment> establishments);
+        IReadOnlyList<InspectionResponse> MapInspectionResponses(IEnumerable<Inspection> inspections);
     }
 }

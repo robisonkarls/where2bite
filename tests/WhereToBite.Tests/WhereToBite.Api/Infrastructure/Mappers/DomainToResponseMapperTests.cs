@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NetTopologySuite.Geometries;
 using WhereToBite.Api.Infrastructure.Mappers;
 using WhereToBite.Api.Model;
@@ -89,6 +90,40 @@ namespace WhereToBite.Tests.WhereToBite.Api.Infrastructure.Mappers
             Assert.Equal(expectedPoint.Y, actualMappedEstablishment.Latitude);
             Assert.Equal(expectedInfraction.AmountFined + expectedInfractionTwo.AmountFined, actualMappedEstablishment.OverallAmountFined);
             Assert.Equal(expectedInspection.Infractions.Count, actualMappedEstablishment.OverallNumberOfInfractions);
+        }
+
+        [Fact]
+        public void ShouldMapInspectionResponse()
+        {
+            // assert
+            var expectedInspection = new Inspection(InspectionStatus.Pass.ToString(), DateTime.Today.AddDays(-10));
+
+            var expectedInfraction = new Infraction(
+                "C - Crucial", 
+                "Ticket", 
+                expectedInspection.Date, 
+                "Fine",
+                10000.00m);
+            
+            var expectedInfractionTwo = new Infraction(
+                "M - Minor", 
+                "Ticket", 
+                expectedInspection.Date,
+                "Fine", 
+                10.00m);
+            
+            expectedInspection.AddNewInfractions(new [] { expectedInfraction, expectedInfractionTwo });
+            var mapper = new DomainToResponseMapper();
+            
+            // act
+            var actual = mapper.MapInspectionResponses(new[] {expectedInspection});
+
+            // assert
+            var actualInspection = Assert.Single(actual);
+            Assert.NotNull(actualInspection);
+            Assert.Equal(expectedInspection.Date, actualInspection.InspectionDate);
+            Assert.Equal(expectedInspection.InspectionStatus.Name, actualInspection.InspectionStatus);
+            Assert.Equal(expectedInspection.Infractions.Count, actualInspection.Infractions.Count());
         }
     }
 }

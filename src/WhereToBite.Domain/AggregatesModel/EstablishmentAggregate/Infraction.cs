@@ -14,7 +14,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         
         [UsedImplicitly]
         private int _infractionActionId;
-        public DateTime Date { get; }
+        public DateTime ConvictionDate { get; }
         public string CourtOutcome { get; }
         public decimal AmountFined { get; }
 
@@ -37,7 +37,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 
             _severityId = Severity.FromName(severity).Id;
             _infractionActionId = InfractionAction.FromName(infractionAction).Id;
-            Date = date;
+            ConvictionDate = date;
             CourtOutcome = courtOutcome ?? throw new ArgumentNullException(nameof(courtOutcome));
             AmountFined = amountFined;
         }

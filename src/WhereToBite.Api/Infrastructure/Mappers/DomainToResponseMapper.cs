@@ -23,7 +23,9 @@ namespace WhereToBite.Api.Infrastructure.Mappers
                     NumberOfInspections = establishment.Inspections.Count,
                     Longitude = establishment.Location.X,
                     Latitude = establishment.Location.Y,
-                    LastInspection = mappedLastInspection
+                    LastInspection = mappedLastInspection,
+                    OverallAmountFined = establishment.Inspections.Select(x => x.Infractions.Sum(infraction => infraction.AmountFined)).Sum(),
+                    OverallNumberOfInfractions = establishment.Inspections.Sum(x => x.Infractions.Count)
                 };
             }).ToList();
         }

@@ -133,6 +133,26 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
                 string.Empty,
                 "Pass",
                 new Point(-79.45886, 43.65493 ));
+            
+            var expectedInspection = new Inspection(InspectionStatus.Pass.ToString(), DateTime.Today.AddDays(-10));
+
+            var expectedInfraction = new Infraction(
+                "C - Crucial", 
+                "Ticket", 
+                expectedInspection.Date, 
+                "Fine",
+                10000.00m);
+            
+            var expectedInfractionTwo = new Infraction(
+                "M - Minor", 
+                "Ticket", 
+                expectedInspection.Date,
+                "Fine", 
+                10.00m);
+            
+            expectedInspection.AddNewInfractions(new [] { expectedInfraction, expectedInfractionTwo });
+            
+            expectedEstablishment.AddNewInspections(new []{expectedInspection});
 
             await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
             await whereToBiteContext.SaveChangesAsync();
@@ -149,6 +169,9 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
             Assert.Equal(expectedEstablishment.Name, actualEstablishment.Name);
             Assert.Equal(expectedEstablishment.Type, actualEstablishment.Type);
             Assert.Equal(expectedEstablishment.EstablishmentStatus, actualEstablishment.EstablishmentStatus);
+            Assert.Equal(
+                expectedInfraction.AmountFined + expectedInfractionTwo.AmountFined, 
+                actualEstablishment.Inspections.Select(x => x.Infractions.Sum(infraction => infraction.AmountFined)).Sum());
         }
         
         [Fact]

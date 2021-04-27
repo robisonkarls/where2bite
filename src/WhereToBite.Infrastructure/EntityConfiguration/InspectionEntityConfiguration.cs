@@ -20,11 +20,11 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("InspectionStatusId")
                 .IsRequired();
-
-            // inspectionConfiguration.HasOne(x => x.InspectionStatus)
-            //     .WithMany()
-            //     .HasForeignKey("_inspectionStatusId");
             
+            inspectionConfiguration
+                .HasMany(x => x.Infractions)
+                .WithOne();
+
             var navigation = inspectionConfiguration.Metadata.FindNavigation(nameof(Inspection.Infractions));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
         }

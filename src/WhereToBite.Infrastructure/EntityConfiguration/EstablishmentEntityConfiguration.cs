@@ -48,13 +48,14 @@ namespace WhereToBite.Infrastructure.EntityConfiguration
                 .HasColumnName("EstablishmentStatusId")
                 .IsRequired();
 
+            establishmentConfiguration
+                .HasMany(x => x.Inspections)
+                .WithOne();
+            
             var navigation = establishmentConfiguration.Metadata.FindNavigation(nameof(Establishment.Inspections));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
 
-            // establishmentConfiguration
-            //     .HasOne(x => x.EstablishmentStatus)
-            //     .WithMany()
-            //     .HasForeignKey(EstablishmentStatusFkName);
+            
         }
     }
 }

@@ -17,6 +17,7 @@ namespace WhereToBite.Infrastructure
 
         // ReSharper disable once UnusedAutoPropertyAccessor.Global
         public DbSet<Establishment> Establishments { get; set; }
+        public DbSet<Inspection> Inspections { get; set; }
         public DbSet<EstablishmentStatus> EstablishmentStatus { get; set; }
         public DbSet<InfractionAction> InfractionActions { get; set; }
         public DbSet<InspectionStatus> InspectionStatus { get; set; }

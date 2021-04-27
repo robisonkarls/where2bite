@@ -18,6 +18,8 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         private int _inspectionStatusId;
         public DateTime Date { get; }
 
+        public Establishment Establishment { get; set; }
+
         public Inspection(string inspectionStatus, DateTime date) : this()
         {
             _inspectionStatusId = InspectionStatus.FromName(inspectionStatus).Id;
@@ -36,11 +38,11 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
             if (_infractions.Count < infractionsList.Count)
             {
                 var lastInfractionDate = _infractions
-                    .Select(i => i.Date)
+                    .Select(i => i.ConvictionDate)
                     .OrderByDescending(i => i.Date)
                     .FirstOrDefault();
                 
-                var filteredInspection = infractionsList.Where(i => i.Date > lastInfractionDate);
+                var filteredInspection = infractionsList.Where(i => i.ConvictionDate > lastInfractionDate);
                 _infractions.AddRange(filteredInspection);
             }
         }

@@ -12,5 +12,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
         Task<Establishment> GetAsync(int establishmentId, CancellationToken cancellationToken);
         Task<IReadOnlyCollection<Establishment>> GetAllWithinRadiusAsync(double radiusSizeInMeters, Point center,
             CancellationToken cancellationToken);
+        Task<IReadOnlyCollection<Inspection>> GetInspectionsAsync(int establishmentId,
+            CancellationToken cancellationToken);
     }
 }

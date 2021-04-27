@@ -225,5 +225,59 @@ namespace WhereToBite.Tests.WhereToBite.Infrastructure.Repositories
 
             await Assert.ThrowsAsync<InvalidOperationException>(() => establishmentRepository.GetAllWithinRadiusAsync(-1, Point.Empty, CancellationToken.None));
         }
+
+        [Fact]
+        public async Task ShouldReturnEstablishmentInspections()
+        {
+            var options = new DbContextOptionsBuilder<WhereToBiteContext>()
+                .UseInMemoryDatabase("test5")
+                .Options;
+
+            var whereToBiteContext = new WhereToBiteContext(options);
+
+            var establishmentRepository = new EstablishmentRepository(whereToBiteContext);
+            
+            var expectedEstablishment = new Establishment(
+                1,
+                "test",
+                "Restaurant",
+                string.Empty,
+                "Pass",
+                new Point(-79.45886, 43.65493 ));
+            
+            var expectedInspection = new Inspection(InspectionStatus.Pass.ToString(), DateTime.Today.AddDays(-10));
+
+            var expectedInfraction = new Infraction(
+                "C - Crucial", 
+                "Ticket", 
+                expectedInspection.Date, 
+                "Fine",
+                10000.00m);
+            
+            var expectedInfractionTwo = new Infraction(
+                "M - Minor", 
+                "Ticket", 
+                expectedInspection.Date,
+                "Fine", 
+                10.00m);
+            
+            expectedInspection.AddNewInfractions(new [] { expectedInfraction, expectedInfractionTwo });
+            
+            expectedEstablishment.AddNewInspections(new []{expectedInspection});
+
+            await whereToBiteContext.Establishments.AddAsync(expectedEstablishment);
+            await whereToBiteContext.SaveChangesAsync();
+            
+            // act
+            var actual = await establishmentRepository.GetInspectionsAsync(1, CancellationToken.None);
+            
+            Assert.NotNull(actual);
+            var actualInspection = Assert.Single(actual);
+            Assert.NotNull(actualInspection);
+            Assert.Equal(expectedInspection.Date, actualInspection.Date);
+            Assert.Equal(expectedInspection.Id, actualInspection.Id);
+            Assert.Equal(expectedInspection.InspectionStatus, actualInspection.InspectionStatus);
+            Assert.Equal(expectedInspection.Infractions.Count, actualInspection.Infractions.Count);
+        }
     }
 }

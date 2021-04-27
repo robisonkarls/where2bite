@@ -30,6 +30,25 @@ namespace WhereToBite.Api.Infrastructure.Mappers
             }).ToList();
         }
 
+        public IReadOnlyList<InspectionResponse> MapInspectionResponses(IEnumerable<Inspection> inspections)
+        {
+            return inspections.Select(inspection =>
+            {
+                return new InspectionResponse
+                {
+                    InspectionDate = inspection.Date,
+                    InspectionStatus = inspection.InspectionStatus.Name,
+                    Infractions = inspection.Infractions.Select(infraction => new InfractionResponse
+                    {
+                        ConvictionDate = infraction.ConvictionDate,
+                        Severity = infraction.Severity.Name,
+                        AmountFined = infraction.AmountFined,
+                        CourtOutcome = infraction.CourtOutcome
+                    })
+                };
+            }).ToList();
+        }
+
         private static LastInspection MapLastInspection(Inspection inspection)
         {
             if (inspection == null)

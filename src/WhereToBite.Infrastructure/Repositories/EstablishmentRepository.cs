@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -62,6 +63,14 @@ namespace WhereToBite.Infrastructure.Repositories
                 .Include(x => x.Inspections)
                 .ThenInclude(x => x.Infractions)
                 .ToListAsync(cancellationToken);;
+        }
+
+        public async Task<IReadOnlyCollection<Inspection>> GetInspectionsAsync(int establishmentId, CancellationToken cancellationToken)
+        {
+            return await _context.Inspections
+                .Where(x => x.Establishment.Id == establishmentId)
+                .Include(x => x.Infractions)
+                .ToListAsync(cancellationToken);
         }
     }
 }

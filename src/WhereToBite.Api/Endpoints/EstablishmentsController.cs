@@ -32,9 +32,8 @@ namespace WhereToBite.Api.Endpoints
             _domainMapper = domainMapper ?? throw new ArgumentNullException(nameof(domainMapper));
         }
         
-        // POST api/v1/[controller]/
+        // POST api/v1/[controller]
         [HttpPost]
-        [Route("nearby")]
         [ProducesResponseType(typeof(IEnumerable<EstablishmentResponse>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<IActionResult> GetEstablishmentsInRadiusAsync(

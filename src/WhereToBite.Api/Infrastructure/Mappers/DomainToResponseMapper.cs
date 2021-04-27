@@ -43,7 +43,8 @@ namespace WhereToBite.Api.Infrastructure.Mappers
                         ConvictionDate = infraction.ConvictionDate,
                         Severity = infraction.Severity.Name,
                         AmountFined = infraction.AmountFined,
-                        CourtOutcome = infraction.CourtOutcome
+                        CourtOutcome = infraction.CourtOutcome,
+                        Action = infraction.InfractionAction.Name
                     })
                 };
             }).ToList();

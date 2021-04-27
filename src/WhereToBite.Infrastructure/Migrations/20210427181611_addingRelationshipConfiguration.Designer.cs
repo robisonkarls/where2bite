@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetTopologySuite.Geometries;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
@@ -10,9 +11,10 @@ using WhereToBite.Infrastructure;
 namespace WhereToBite.Infrastructure.Migrations
 {
     [DbContext(typeof(WhereToBiteContext))]
-    partial class WhereToBiteContextModelSnapshot : ModelSnapshot
+    [Migration("20210427181611_addingRelationshipConfiguration")]
+    partial class addingRelationshipConfiguration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

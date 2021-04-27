@@ -60,7 +60,8 @@ namespace WhereToBite.Infrastructure.Repositories
             return await _context.Establishments
                 .Where(e => e.Location.IsWithinDistance(center, radiusSizeInMeters))
                 .Include(x => x.Inspections)
-                .ToArrayAsync(cancellationToken);
+                .ThenInclude(x => x.Infractions)
+                .ToListAsync(cancellationToken);;
         }
     }
 }

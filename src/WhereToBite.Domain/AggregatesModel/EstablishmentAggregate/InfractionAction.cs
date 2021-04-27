@@ -50,7 +50,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 
             return state ??
                    throw new WhereToBiteDomainException(
-                       $"Possible values for Severity: {string.Join(",", List().Select(s => s.Name))}");
+                       $"Possible values for InfractionAction: {string.Join(",", List().Select(s => s.Name))}");
         }
 
         public static InfractionAction From(int id)
@@ -59,7 +59,7 @@ namespace WhereToBite.Domain.AggregatesModel.EstablishmentAggregate
 
             return state ??
                    throw new WhereToBiteDomainException(
-                       $"Possible values for Severity: {string.Join(",", List().Select(s => s.Name))}");
+                       $"Possible values for InfractionAction: {string.Join(",", List().Select(s => s.Name))}");
         }
     }
 }

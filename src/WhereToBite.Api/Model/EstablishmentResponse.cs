@@ -14,6 +14,8 @@ namespace WhereToBite.Api.Model
         public string Type { get; init; }
         public int NumberOfInspections { get; init; }
         public LastInspection LastInspection { get; init; }
+        public int OverallNumberOfInfractions { get; set; }
+        public decimal OverallAmountFined { get; set; }
     }
 
     [Serializable]
